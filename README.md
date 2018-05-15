@@ -62,7 +62,7 @@ Basic Usage
        ./script/convert.sh   -input FOLDER -output FOLDER  [ other options ]
 
        ANT: 
-       ant -f ./script/testing.xml -Dinputfile=./test/somestuff/  convert
+       ant -f ./script/xtext-ant.xml -Dinputfile=./test/somestuff/  convert
        
 
   Build:

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<project name="XText" >
+
+  <path id="runtime.classpath">
+    <pathelement location="${xtext}/etc" />
+    <fileset dir="${xtext}/lib" includes="**/*.jar" />
+  </path>
+
+  <!-- XText convert the input and save in output folder-->
+    <target name="convert">
+        <java classname="org.opensextant.xtext.XText"  classpathref="runtime.classpath" fork="yes" dir="${xtext}">
+            <jvmarg value="-Xmx600m"/>
+            <jvmarg value="-Dlogback.configurationFile=${xtext}/etc/logback.xml" />
+            <arg value="-i"/>
+            <arg value="${input}"/>
+            <arg value="-o"/>
+            <arg value="${output}"/>
+            <arg value="-e"/>
+            <arg value="-h"/>
+        </java>
+    </target>
+</project>
