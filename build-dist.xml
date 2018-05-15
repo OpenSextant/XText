@@ -1,0 +1,72 @@
+<project default="dist" name="Xponents Distribution">
+  <description>
+    Builds a version of Xponents that runs out of the box.
+  </description>
+  <property name="xtext.home" value="${basedir}" />
+  <property name="xtext.version" value="2.10"/>
+  <property name="xtext.release" location="${xtext.home}/dist/XText-${xtext.version}" />
+  <target name="build">
+    <exec executable="mvn" dir="${xtext.home}" failonerror="true">
+      <arg value="-DincludeScope=test"/>
+      <arg value="-DincludeScope=runtime"/>
+      <arg value="-DincludeScope=compile"/>
+      <arg value="-DskipTests=true"/>
+      <arg value="clean"/>
+      <arg value="install"/>
+      <arg value="javadoc:jar"/>
+      <arg value="dependency:copy-dependencies"/>
+    </exec>
+   </target>
+
+  <target name="dist" depends="build">
+    <delete dir="${xtext.release}"/>
+    <mkdir dir="${xtext.release}"/>
+    <mkdir dir="${xtext.release}/lib"/>
+    <mkdir dir="${xtext.release}/etc"/>
+    <mkdir dir="${xtext.release}/logs"/>
+    <mkdir dir="${xtext.release}/test"/>
+    <mkdir dir="${xtext.release}/script"/>
+
+    <copy todir="${xtext.release}/lib/">
+        <fileset dir="${xtext.home}/target">
+           <include name="*.jar" />
+        </fileset>
+    </copy>
+  	
+    <copy todir="${xtext.release}/etc/">
+        <fileset dir="${xtext.home}/etc">
+           <include name="logback.*" />
+        </fileset>
+    	</copy>
+
+    <copy todir="${xtext.release}">
+        <fileset dir="${xtext.home}">
+           <include name="*.htm*" />
+           <include name="*.md" />
+        </fileset>
+    </copy>
+
+    <copy todir="${xtext.release}/script/">
+        <fileset dir="${xtext.home}/script">
+           <include name="*.*" />
+        </fileset>
+    </copy>
+
+  	<copy todir="${xtext.release}/lib">
+        <fileset dir="${xtext.home}/lib">
+           <include name="*.jar" />
+        </fileset>
+    </copy>
+
+    <copy todir="${xtext.release}/test/">
+        <fileset dir="${xtext.home}/src/test/resources/">
+           <include name="*.*" />
+        </fileset>
+    </copy>
+
+    <copy todir="${xtext.release}/doc/apidocs">
+        <fileset dir="${xtext.home}/target/apidocs"/>
+    </copy>
+  </target>
+
+</project>
