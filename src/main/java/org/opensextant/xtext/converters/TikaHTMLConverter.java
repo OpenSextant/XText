@@ -120,8 +120,7 @@ public class TikaHTMLConverter extends ConverterAdapter {
      * </pre>
      */
     @Override
-    protected ConvertedDocument conversionImplementation(InputStream input, File doc)
-            throws IOException {
+    protected ConvertedDocument conversionImplementation(InputStream input, File doc) throws IOException {
         Metadata metadata = new Metadata();
         HashMap<String, String> moreMetadata = new HashMap<>();
 
@@ -135,8 +134,7 @@ public class TikaHTMLConverter extends ConverterAdapter {
         }
 
         try {
-            parser.parse(input, (scrubHTMLArticle ? scrubbingHandler : handler), metadata,
-                    new ParseContext());
+            parser.parse(input, (scrubHTMLArticle ? scrubbingHandler : handler), metadata, new ParseContext());
 
             if (doc != null) {
                 parseHTMLMetadata(doc, moreMetadata);
@@ -149,7 +147,7 @@ public class TikaHTMLConverter extends ConverterAdapter {
         }
 
         ConvertedDocument textdoc = new ConvertedDocument(doc);
-
+        textdoc.is_converted = true;
         textdoc.addTitle(metadata.get(TikaCoreProperties.TITLE));
 
         String text = null;

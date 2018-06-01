@@ -41,7 +41,7 @@ import org.opensextant.data.DocInput;
 import org.opensextant.util.FileUtility;
 import org.opensextant.util.TextUtils;
 
-import net.sf.json.JSONObject;
+import jodd.json.JsonObject;
 
 /**
  *
@@ -63,19 +63,18 @@ public final class ConvertedDocument extends DocInput {
     public static final String URL_REFERRER_FIELD = "url-referrer";
 
     public static final String[] fields = {
-        // Dublin Core style metadata fields
-        "title", "author", "creator_tool", "pub_date", "keywords", "subject", "filepath",
-        "encoding",
-        //
-        // XText metadata.
-        "filtered", "converter", "conversion_date", "encrypted", "filesize", "textsize",
+            // Dublin Core style metadata fields
+            "title", "author", "creator_tool", "pub_date", "keywords", "subject", "filepath", "encoding",
+            //
+            // XText metadata.
+            "filtered", "converter", "conversion_date", "encrypted", "filesize", "textsize",
 
-        // Consideration for compound documents; if this instance is a child doc then what is the parent?
-        "xtext_id", // REQUIRED -- the current document ID.
-        "xtext_parent_id", "xtext_parent_path",
+            // Consideration for compound documents; if this instance is a child doc then what is the parent?
+            "xtext_id", // REQUIRED -- the current document ID.
+            "xtext_parent_id", "xtext_parent_path",
 
-        // Additional metadata for web content.
-        URL_FIELD, URL_REFERRER_FIELD };
+            // Additional metadata for web content.
+            URL_FIELD, URL_REFERRER_FIELD };
 
     /**
      * Converters will populate metadatata. If the entry is an object or a file, its name will reflect that.
@@ -103,7 +102,7 @@ public final class ConvertedDocument extends DocInput {
     public String textpath = null;
     public String encoding = null;
     private MimeType mimeType = null;
-    JSONObject meta = new JSONObject();
+    JsonObject meta = new JsonObject();
     protected static boolean overwrite = true;
     /**
      * Duration in Milliseconds to convert
@@ -169,7 +168,7 @@ public final class ConvertedDocument extends DocInput {
             this.extension = FilenameUtils.getExtension(filename);
             this.basename = FilenameUtils.getBaseName(filename);
 
-            addProperty("filesize", this.filesize);
+            addNumberProperty("filesize", this.filesize);
             addProperty("filepath", this.filepath);
 
             addProperty("conversion_date", dtfmt.print(new Date().getTime()));
@@ -342,8 +341,8 @@ public final class ConvertedDocument extends DocInput {
     public Map<String, String> getProperties() {
         Map<String, String> props = new HashMap<String, String>();
 
-        for (Object fld : meta.keySet()) {
-            props.put(fld.toString(), meta.getString(fld.toString()));
+        for (String fld : meta.fieldNames()) {
+            props.put(fld, meta.getString(fld));
         }
         return props;
     }
@@ -496,7 +495,7 @@ public final class ConvertedDocument extends DocInput {
             textpath = this.filepath;
         }
 
-        meta.put("textsize", buffer.length());
+        addNumberProperty("textsize", (long) buffer.length());
     }
 
     /**
@@ -504,7 +503,7 @@ public final class ConvertedDocument extends DocInput {
      * @return metadata value for k
      */
     public String getProperty(String k) {
-        return meta.optString(k, null);
+        return meta.getString(k);
     }
 
     private boolean checkField(String k) {
@@ -516,6 +515,14 @@ public final class ConvertedDocument extends DocInput {
             return;
         }
         meta.put(k, v);
+    }
+
+    public void addNumberProperty(String k, long v) {
+        meta.put(k, Long.toString(v));
+    }
+
+    public long getNumberProperty(String k) {
+        return Long.parseLong(meta.getString(k));
     }
 
     /*
@@ -715,7 +722,7 @@ public final class ConvertedDocument extends DocInput {
             this.filetime = new Date(target.lastModified());
         }
 
-        meta.put("filetime", this.filetime.getTime());
+        addNumberProperty("filetime", this.filetime.getTime());
 
         // Tracking Parent/Child objects.
         meta.put("xtext_id", this.id);

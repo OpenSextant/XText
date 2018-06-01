@@ -101,6 +101,7 @@ public class DefaultConverter extends ConverterAdapter {
                 textdoc.setText(TextUtils.reduce_line_breaks(t));
             }
         }
+        textdoc.is_converted = true;
         return textdoc;
     }
 }

@@ -28,7 +28,8 @@ import org.opensextant.util.FileUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.json.JSONObject;
+import jodd.json.JsonObject;
+import jodd.json.JsonParser;
 
 /**
  * PathManager -- a group of routines related to caching conversions and archive collections.
@@ -433,8 +434,7 @@ public class PathManager {
             FileUtility.makeDirectory(saveFolder);
         }
 
-        log.debug("ARCHIVE FILE={}, node-in={}, cache-in={}, export={}", input, outputName,
-                outputNode, saveFolder);
+        log.debug("ARCHIVE FILE={}, node-in={}, cache-in={}, export={}", input, outputName, outputNode, saveFolder);
 
         return saveFolder;
     }
@@ -442,10 +442,8 @@ public class PathManager {
     public boolean verifyArchiveExport(String input) {
         if (!this.saveConversionsWithOriginals && !this.saveExtractedChildrenWithOriginals
                 && this.conversionCache == null) {
-            log.error(
-                    "Sorry -- if not saving in input folder, you must provide a separate "
-                            + "archive to contain ZIP and other archives that are extracted.  Ignoring FILE={}",
-                            input);
+            log.error("Sorry -- if not saving in input folder, you must provide a separate "
+                    + "archive to contain ZIP and other archives that are extracted.  Ignoring FILE={}", input);
             return false;
         }
 
@@ -503,8 +501,7 @@ public class PathManager {
      * @return previously converted document or null if not found.
      * @throws IOException on error, likely from getCachedDocument
      */
-    private static ConvertedDocument _uncacheConversion(String path, String fname)
-            throws IOException {
+    private static ConvertedDocument _uncacheConversion(String path, String fname) throws IOException {
         // Common
         String targetPath = null;
         if (fname.endsWith(".txt")) {
@@ -532,8 +529,7 @@ public class PathManager {
      * @return the cached version of the conversion; null if not found or if no conversion was made.
      * @throws IOException on err
      */
-    public static ConvertedDocument getCachedConversion(String cacheDir, String inputDir, File obj)
-            throws IOException {
+    public static ConvertedDocument getCachedConversion(String cacheDir, String inputDir, File obj) throws IOException {
         String rel_path = getRelativePath(inputDir, obj.getParentFile().getAbsolutePath());
 
         // This folder contains the cached Item.
@@ -602,10 +598,8 @@ public class PathManager {
 
     }
 
-    public final static String DEFAULT_EMBED_FOLDER_IN_PATH = String.format("/%s/",
-            DEFAULT_EMBED_FOLDER);
-    public final static String DEFAULT_EMBED_FOLDER_IN_WINPATH = String.format("\\%s\\",
-            DEFAULT_EMBED_FOLDER);
+    public final static String DEFAULT_EMBED_FOLDER_IN_PATH = String.format("/%s/", DEFAULT_EMBED_FOLDER);
+    public final static String DEFAULT_EMBED_FOLDER_IN_WINPATH = String.format("\\%s\\", DEFAULT_EMBED_FOLDER);
 
     /**
      * Simple test to see if filepath contains "./xtext/" for windows path or unix path.
@@ -636,7 +630,7 @@ public class PathManager {
     /**
      * Given a path, retrieve a document.
      *
-     * @param filepath file to retireve.
+     * @param filepath file to retrieve.
      * @return the cached document
      * @throws IOException on err
      */
@@ -662,9 +656,11 @@ public class PathManager {
             return null;
         }
         // Decode JSON
-        String json = new String(Base64.decodeBase64(header.substring(ConvertedDocument.XT_LABEL
-                .length())));
-        JSONObject doc_meta = JSONObject.fromObject(json);
+        String encodedJson = header.substring(ConvertedDocument.XT_LABEL.length());
+        String json = new String(Base64.decodeBase64(encodedJson));
+        JsonParser parser = JsonParser.create();
+        JsonObject doc_meta = parser.parseAsJsonObject(json);
+
         String fpath = doc_meta.getString("filepath");
 
         ConvertedDocument doc = new ConvertedDocument(new File(fpath));
@@ -681,14 +677,14 @@ public class PathManager {
         doc.is_cached = true;
         doc.is_converted = true;
 
-        doc.filetime = new Date(Long.parseLong(doc.getProperty("filetime")));
+        doc.filetime = new Date(doc.getNumberProperty("filetime"));
         doc.setCreateDate();
 
         // DocInput requirement: provided id + file paths
         // If there is another Identifier to use,... caller will have an opportunity to set it
         // when the get the instance.
         //
-        String idvalue = doc.meta.optString("xtext_id");
+        String idvalue = doc.meta.getString("xtext_id");
         doc.setId(idvalue != null ? idvalue : doc.filepath);
 
         return doc;

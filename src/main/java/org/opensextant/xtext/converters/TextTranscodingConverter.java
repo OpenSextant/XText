@@ -67,7 +67,7 @@ public class TextTranscodingConverter extends ConverterAdapter {
             in.close();
         }
 
-        if (data == null){
+        if (data == null) {
             return textdoc;
         }
 
@@ -96,6 +96,9 @@ public class TextTranscodingConverter extends ConverterAdapter {
             }
             textdoc.setEncoding(cs.getName());
             textdoc.setText(new String(data, cs.getName()));
+        }
+        if (textdoc.do_convert) {
+            textdoc.is_converted = true;
         }
 
         return textdoc;
