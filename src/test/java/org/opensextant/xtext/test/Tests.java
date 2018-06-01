@@ -46,14 +46,15 @@ public class Tests {
 
         // change to a temp directory that is java 1.6 compliant
         //tempDir = Files.createTempDirectory("xtext_test").toFile();
-        File t = File.createTempFile("xtext_text","");
+        File t = File.createTempFile("xtext_text", "");
         tempDir = new File(t.getAbsolutePath() + "_d");
         tempDir.mkdir();
+
+        //test tmp file delete
         t.delete();
 
-
-        doc = new File(tempDir, "simple_test.pdf");
-        FileUtils.copyInputStreamToFile(Tests.class.getResourceAsStream("/simple_test.pdf"), doc);
+        doc = new File(tempDir, "simple-test.pdf");
+        FileUtils.copyInputStreamToFile(Tests.class.getResourceAsStream("/simple-test.pdf"), doc);
     }
 
     @AfterClass
@@ -63,7 +64,7 @@ public class Tests {
         }
     }
 
-    @Test
+    //@Test
     public void testTrivialUncache() throws IOException {
         trivialUncache(doc.getCanonicalPath());
     }
@@ -76,16 +77,16 @@ public class Tests {
      * error.
      */
     public void trivialUncache(String input) throws IOException {
-        String[] types = {"txt"};
+        String[] types = { "txt" };
 
         File inputFile = new File(input);
         if (inputFile.isFile()) {
             try {
-                ConvertedDocument doc = PathManager.getCachedDocument(inputFile);
-                if (doc == null) {
+                ConvertedDocument doc2 = PathManager.getCachedDocument(inputFile);
+                if (doc2 == null) {
                     log.info("No document in cache for " + inputFile.getPath());
                 } else {
-                    log.info(doc.filepath + " TITLE=" + doc.getProperty("title"));
+                    log.info(doc2.filepath + " TITLE=" + doc2.getProperty("title"));
                 }
             } catch (Exception anyErr) {
                 log.error("Any error could happend:  Unicode file name?  FILE=" + inputFile.getAbsolutePath(), anyErr);
@@ -116,8 +117,7 @@ public class Tests {
         xt.enableSaving(test_save);
         xt.enableOverwrite(true); // reuse cached conversions if possible.
         xt.setup();
-        xt.setConversionListener(
-                new ConversionListener() {
+        xt.setConversionListener(new ConversionListener() {
             public void handleConversion(ConvertedDocument d, String fpath) {
                 log.info("FILE=" + d.filename + " Converted?=" + d.is_converted + " ID={} PATH={}", d.id, fpath);
                 try {
@@ -127,43 +127,42 @@ public class Tests {
                 } catch (IOException e) {
                     log.error("IO error", e);
                 }
-                log.info("\t\tTry resetting Doc ID to default ID = " +d.id);
+                log.info("\t\tTry resetting Doc ID to default ID = " + d.id);
             }
         });
         xt.extractText(input);
     }
-    
+
     @Test
-    public void parseBareFilename() throws IOException, ConfigException{
+    public void parseBareFilename() throws IOException, ConfigException {
         URL item = Test.class.getResource("/4567891230" /* Copy:Headers PPT file*/);
         String input = item.getFile();
         File f = new File(input);
         XText xt = new XText();
         xt.enableSaving(false);
-        
-        xt.enableNoFileExtension(true);        
+
+        xt.enableNoFileExtension(true);
         xt.setup();
         xt.convertFile(f);
-        xt.enableNoFileExtension(false);        
+        xt.enableNoFileExtension(false);
         xt.setup();
         xt.convertFile(f);
-        
-    }   
-    
+
+    }
+
     @Test
-    public void parseEmbedded() throws IOException, ConfigException{
+    public void parseEmbedded() throws IOException, ConfigException {
         URL item = Test.class.getResource("/T-DS_Excel2003-PPT2003_1.xls");
         String input = item.getFile();
 
         XText xt = new XText();
         xt.getPathManager().enableSaveWithInput(true);
-        
+
         xt.enableSaving(true);
         xt.enableOverwrite(true); // reuse cached conversions if possible.
-        
+
         xt.setup();
-        xt.setConversionListener(
-                new ConversionListener() {
+        xt.setConversionListener(new ConversionListener() {
             public void handleConversion(ConvertedDocument d, String fpath) {
                 log.info("FILE=" + d.filename + " Converted?=" + d.is_converted + " ID={} PATH={}", d.id, fpath);
                 try {
@@ -171,31 +170,34 @@ public class Tests {
                 } catch (NoSuchAlgorithmException | IOException e) {
                     log.error("Hashing error", e);
                 }
-                log.info("\t\tTry resetting Doc ID to default ID = " +d.id);
+                log.info("\t\tTry resetting Doc ID to default ID = " + d.id);
             }
         });
         xt.extractText(input);
-        
+
         //assert(true);
-}
+    }
+    
+    static ConvertedDocument saveHTMLdoc= null;
 
     @Test
     public void testHTMLConversion() throws IOException, java.net.URISyntaxException {
         String buffer = "<html><head><title>Silly conversion</title></head><body> Document text would be here.</body>";
-        ConvertedDocument doc = new TikaHTMLConverter(false).convert(buffer);
-        log.info("HTML: tile= " + doc.getProperty("title"));
-        log.info("HTML: body= " + doc.getText());
+        ConvertedDocument doc1 = new TikaHTMLConverter(false).convert(buffer);
+        log.info("HTML: tile= " + doc1.getProperty("title"));
+        log.info("HTML: body= " + doc1.getText());
 
         File f = new File(Tests.class.getResource("/test.html").toURI());
-        doc = new TikaHTMLConverter(true).convert(f);
-        log.info("HTML: tile= " + doc.getProperty("title"));
-        log.info("HTML: body= " + doc.getText());
+        saveHTMLdoc = new TikaHTMLConverter(true).convert(f);
+        log.info("HTML: tile= " + saveHTMLdoc.getProperty("title"));
+        log.info("HTML: body= " + saveHTMLdoc.getText());
 
-        doc = new TikaHTMLConverter(false).convert(f);
-        log.info("HTML: tile= " + doc.getProperty("title"));
-        log.info("HTML: body= " + doc.getText());
+        ConvertedDocument doc3 = new TikaHTMLConverter(false).convert(f);
+        log.info("HTML: tile= " + doc3.getProperty("title"));
+        log.info("HTML: body= " + doc3.getText());
+
     }
-    
+
     public void testHTMLDecode(String f) throws IOException {
         String out = StringEscapeUtils.unescapeHtml4(FileUtility.readFile(f));
         FileUtility.writeFile(out, f + ".out");
@@ -205,9 +207,17 @@ public class Tests {
         Tests t = new Tests();
         try {
             t.testHTMLDecode(args[0]);
-            t.testHTMLConversion();
+             t.testHTMLConversion();
+             
             if (args.length > 0) {
-                t.trivialUncache(args[0]);
+                XText xt = new XText();
+                xt.getPathManager().enableSaveWithInput(true);
+                xt.enableSaving(true);
+                xt.enableOverwrite(true); // reuse cached conversions if possible.
+                xt.setup();
+                xt.getPathManager().saveConversion(saveHTMLdoc);
+
+                t.trivialUncache(saveHTMLdoc.getTextpath());
                 t.trivialInventory(args[0], true);
             }
         } catch (Exception ioerr) {

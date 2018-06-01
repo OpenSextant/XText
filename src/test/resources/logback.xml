@@ -16,9 +16,9 @@
     </logger>
     <logger name="org.opensextant.extractors" level="debug">
     </logger>
-    <logger name="org.opensextant.xtext" level="info">
+    <logger name="org.opensextant.xtext" level="debug">
     </logger>
-    <logger name="org.opensextant.xtext.converters" level="info">
+    <logger name="org.opensextant.xtext.converters" level="debug">
     </logger>
 
 </configuration>
