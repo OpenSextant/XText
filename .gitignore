@@ -1,1 +1,6 @@
 /target/
+/src/test/resources/xtext
+/src/test/resources/test.html.out
+.settings/
+.project
+.classpath
