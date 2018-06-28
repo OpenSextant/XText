@@ -11,8 +11,7 @@ public class ImageGroper {
         System.out.println("ImageGroper -i input  [-h] [-o output] [-e]");
         System.out.println("  input is file or folder");
         System.out.println("  output is a folder where you want to archive converted docs");
-        System.out
-                .println("  -e embeds the saved, conversions in the input folder in 'xtext' folders in input tree");
+        System.out.println("  -e embeds the saved, conversions in the input folder in 'xtext' folders in input tree");
         System.out.println("  NOTE: -e has same effect as setting output to input");
         System.out.println("  -h enables HTML scrubbing");
     }
@@ -39,8 +38,7 @@ public class ImageGroper {
 
                 case 'e':
                     embed = true;
-                    System.out
-                            .println("Saving conversions to Input folder.  Output folder will be ignored.");
+                    System.out.println("Saving conversions to Input folder.  Output folder will be ignored.");
                     break;
                 default:
                     ImageGroper.usage();
@@ -67,9 +65,6 @@ public class ImageGroper {
             xt.extractText(input);
         } catch (IOException ioerr) {
             ioerr.printStackTrace();
-
-        } catch (ConfigException cfgerr) {
-            cfgerr.printStackTrace();
         }
     }
 }

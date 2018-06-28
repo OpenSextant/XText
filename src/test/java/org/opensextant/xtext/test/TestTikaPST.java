@@ -2,7 +2,7 @@ package org.opensextant.xtext.test;
 
 import java.io.IOException;
 
-import org.opensextant.ConfigException;
+//import org.opensextant.ConfigException;
 import org.opensextant.xtext.XText;
 
 public class TestTikaPST {
@@ -26,12 +26,7 @@ public class TestTikaPST {
             xt.extractText(input);
         } catch (IOException ioerr) {
             ioerr.printStackTrace();
-            System.err.println("IO issue" + ioerr.getMessage());
-
-        } catch (ConfigException cfgerr) {
-            cfgerr.printStackTrace();
-            System.err.println("Config issue" + cfgerr.getMessage());
+            System.err.println("IO/Config issue" + ioerr.getMessage());
         }
     }
-
 }

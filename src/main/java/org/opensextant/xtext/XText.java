@@ -307,8 +307,8 @@ public final class XText implements ExclusionFilter, Converter {
 
     public void reportStatistics() {
         average_conv_time = (int) ((float) total_conv_time / total_conversions);
-        log.info("TOTAL of N=" + total_conversions + " documents converted"
-                + "\n With an average time (ms) of " + average_conv_time);
+        log.info("TOTAL of N=" + total_conversions + " documents converted" + "\n With an average time (ms) of "
+                + average_conv_time);
     }
 
     protected long start_time = 0;
@@ -344,9 +344,8 @@ public final class XText implements ExclusionFilter, Converter {
 
         /* Filter on absolute path */
         if (PathManager.isXTextCache(path)) {
-            throw new ConfigException(
-                    "XText cannot be directed to extract text from its own cache files. "
-                            + "Move the cache files out of ./xtext/ folders if you really need to do this.");
+            throw new ConfigException("XText cannot be directed to extract text from its own cache files. "
+                    + "Move the cache files out of ./xtext/ folders if you really need to do this.");
         }
 
         if (isArchive(input.getName())) {
@@ -370,8 +369,7 @@ public final class XText implements ExclusionFilter, Converter {
 
         if (paths.isSaving()) {
             if (paths.isSaveWithInput()) {
-                log.info(
-                        "Output can be accessed at from the input folder {} in 'xtext' sub-folders",
+                log.info("Output can be accessed at from the input folder {} in 'xtext' sub-folders",
                         input.getParent());
             } else {
                 log.info("Output can be accessed at " + paths.getConversionCache());
@@ -465,8 +463,7 @@ public final class XText implements ExclusionFilter, Converter {
         paths.setStripPrefixPath(saveFolder.getAbsolutePath());
         paths.setInputRoot(saveFolder);
 
-        ArchiveNavigator deArchiver = new ArchiveNavigator(input, saveFolder.getAbsolutePath(),
-                this, this);
+        ArchiveNavigator deArchiver = new ArchiveNavigator(input, saveFolder.getAbsolutePath(), this, this);
         deArchiver.overwrite = ConvertedDocument.overwrite;
 
         log.info("\tArchive Found ({}). Expanding to {}", input, saveFolder);
@@ -601,8 +598,7 @@ public final class XText implements ExclusionFilter, Converter {
      * @throws ConfigException
      *             on err
      */
-    public ConvertedDocument convertFile(File input, ConvertedDocument parent) throws IOException,
-            ConfigException {
+    public ConvertedDocument convertFile(File input, ConvertedDocument parent) throws IOException, ConfigException {
 
         if (parent == null && filterOutFile(input)) {
             return null;
@@ -763,8 +759,8 @@ public final class XText implements ExclusionFilter, Converter {
      *             on err
      */
     public void convertFolder(File input) throws IOException {
-        java.util.Collection<File> files = FileUtils.listFiles(input, new SuffixFileFilter(
-                fileFilters, IOCase.INSENSITIVE), FileFilterUtils.trueFileFilter());
+        java.util.Collection<File> files = FileUtils.listFiles(input,
+                new SuffixFileFilter(fileFilters, IOCase.INSENSITIVE), FileFilterUtils.trueFileFilter());
         for (File f : files) {
             try {
                 convertFile(f);
@@ -836,8 +832,7 @@ public final class XText implements ExclusionFilter, Converter {
                     parentDoc.addChild(childConv);
                 }
             } catch (Exception err) {
-                log.error("Failed to write out child {}, but will continue with others", child.id,
-                        err);
+                log.error("Failed to write out child {}, but will continue with others", child.id, err);
             } finally {
                 if (io != null) {
                     io.close();
@@ -995,11 +990,8 @@ public final class XText implements ExclusionFilter, Converter {
     public static void usage() {
         System.out.println();
         System.out.println("==========XText Usage=============");
-        System.out
-                .println("XText --input input  [--help] "
-                        + "\n\t[--embed-conversion | --output folder ]   "
-                        + "\n\t[--embed-children   | --export folder] "
-                        + "\n\t[--clean-html]   [--strip-prefix path]");
+        System.out.println("XText --input input  [--help] " + "\n\t[--embed-conversion | --output folder ]   "
+                + "\n\t[--embed-children   | --export folder] " + "\n\t[--clean-html]   [--strip-prefix path]");
         System.out.println(" --help  print this message");
         System.out.println(" --input  where <input> is file or folder");
         System.out.println(" --output  where <folder> is output is a folder where you want to archive converted docs");
@@ -1089,8 +1081,7 @@ public final class XText implements ExclusionFilter, Converter {
                     break;
                 case 'e':
                     embed = true;
-                    System.out
-                            .println("Saving conversions to Input folder.  Output folder will be ignored.");
+                    System.out.println("Saving conversions to Input folder.  Output folder will be ignored.");
                     break;
                 case 'T':
                     xt.enableTikaPST(true);
@@ -1155,9 +1146,6 @@ public final class XText implements ExclusionFilter, Converter {
         } catch (IOException ioerr) {
             XText.usage();
             ioerr.printStackTrace();
-        } catch (ConfigException cfgerr) {
-            XText.usage();
-            cfgerr.printStackTrace();
         }
     }
 }

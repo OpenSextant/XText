@@ -48,7 +48,7 @@ public class VideoTests implements ConversionListener {
 
         try {
             new VideoTests().run(args[0]);
-        } catch (IOException | ConfigException err) {
+        } catch (IOException err) {
             err.printStackTrace();
         }
     }
