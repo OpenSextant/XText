@@ -78,6 +78,10 @@ Basic Usage
 RELEASE NOTES
 ================
 
+v3.0  INDEPENDENCE DAY 2018
+-----------------------------
+- OpenSextant Xponents 3.0 release
+
 v2.10.7 
 -----------------------------
 - Moved XText out of Xponents folder.
