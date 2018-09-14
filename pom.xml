@@ -4,7 +4,7 @@
 >
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.0</version>
+  <version>3.0.3</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and similar toolkits</description>
@@ -39,7 +39,7 @@
     <dependency>
       <groupId>org.opensextant</groupId>
       <artifactId>opensextant-xponents</artifactId>
-      <version>3.0</version>
+      <version>3.0.3</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
@@ -84,12 +84,14 @@
       <artifactId>java-getopt</artifactId>
       <version>1.0.13</version>
     </dependency>
+    <!-- 
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
       <version>${poi.version}</version>
       <scope>runtime</scope>
     </dependency>
+    -->
     <!-- Override JSON-lib use of old commons-lang 2.5 -->
     <dependency>
       <groupId>commons-lang</groupId>
@@ -150,12 +152,12 @@
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-core</artifactId>
-      <version>1.17</version>
+      <version>1.18</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-parsers</artifactId>
-      <version>1.17</version>
+      <version>1.18</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.sis.storage</groupId>
