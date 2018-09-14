@@ -12,6 +12,7 @@
         <java classname="org.opensextant.xtext.XText"  classpathref="runtime.classpath" fork="yes" dir="${xtext}">
             <jvmarg value="-Xmx600m"/>
             <jvmarg value="-Dlogback.configurationFile=${xtext}/etc/logback.xml" />
+            <jvmarg value="-Dtika.config=${xtext}/etc/tika-config.xml" />
             <arg value="-i"/>
             <arg value="${input}"/>
             <arg value="-o"/>
