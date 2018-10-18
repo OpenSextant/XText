@@ -4,6 +4,8 @@ As a user you can run the XText program using the "convert" shell script or BAT 
 Usage is the following, and you may need to write your own version of the script to adapt
 command line arguments for ease of use.
 
+**NOTE:** This script is also implemented as a groovy script (Xponents/Examples/script/).
+
 Terminology:   
 
    Conversion   = binary to text or any markup to text conversion.
