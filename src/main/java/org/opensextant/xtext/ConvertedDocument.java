@@ -102,7 +102,7 @@ public final class ConvertedDocument extends DocInput {
     public String textpath = null;
     public String encoding = null;
     private MimeType mimeType = null;
-    JsonObject meta = new JsonObject();
+    protected JsonObject meta = new JsonObject();
     protected static boolean overwrite = true;
     /**
      * Duration in Milliseconds to convert
@@ -334,15 +334,24 @@ public final class ConvertedDocument extends DocInput {
         return children;
     }
 
+    /** 
+     * 
+     * @return Jodd JsonObject
+     */
+    public JsonObject getJSONProperties() {
+        return meta;
+    }
+
     /**
      * All properties are added as a string
      * @return  new Map of properties;  Copy of the internal JSON properties
      */
     public Map<String, String> getProperties() {
-        Map<String, String> props = new HashMap<String, String>();
-
-        for (String fld : meta.fieldNames()) {
-            props.put(fld, meta.getString(fld));
+        Map<String, String> props = new HashMap<>();
+        Map<String, Object> jsonMap = meta.map();
+        for (String fld : jsonMap.keySet()) {
+            Object val = jsonMap.get(fld);
+            props.put(fld, (val == null ? null : jsonMap.get(fld).toString()));
         }
         return props;
     }

@@ -1015,6 +1015,11 @@ public final class XText implements ExclusionFilter, Converter {
     static class MainProgramListener implements ConversionListener {
 
         private final Logger log = LoggerFactory.getLogger(getClass());
+        private boolean verbosity = false;
+
+        public MainProgramListener(boolean v) {
+            this.verbosity = v;
+        }
 
         @Override
         public void handleConversion(ConvertedDocument doc, String path) {
@@ -1023,6 +1028,9 @@ public final class XText implements ExclusionFilter, Converter {
                 converted = doc.is_converted;
             }
             log.info("Converted. FILE={} Status={}, Converted={}", path, doc != null, converted);
+            if (this.verbosity) {
+                log.info("\t {}", doc.getProperties());
+            }
         }
     }
 
@@ -1032,6 +1040,7 @@ public final class XText implements ExclusionFilter, Converter {
                 new LongOpt("output", LongOpt.REQUIRED_ARGUMENT, null, 'o'),
                 new LongOpt("export", LongOpt.REQUIRED_ARGUMENT, null, 'x'),
                 new LongOpt("strip-prefix", LongOpt.REQUIRED_ARGUMENT, null, 'p'),
+                new LongOpt("verbose", LongOpt.NO_ARGUMENT, null, 'v'),
                 new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'),
                 new LongOpt("clean-html", LongOpt.NO_ARGUMENT, null, 'H'),
                 new LongOpt("embed-conversion", LongOpt.NO_ARGUMENT, null, 'e'),
@@ -1046,6 +1055,7 @@ public final class XText implements ExclusionFilter, Converter {
         boolean embed = false;
         boolean filter_html = false;
         boolean saveChildrenWithInput = false;
+        boolean verbose = false;
         String saveChildrenTo = null;
         String prefix = null;
 
@@ -1078,6 +1088,9 @@ public final class XText implements ExclusionFilter, Converter {
                     break;
                 case 'p':
                     prefix = opts.getOptarg();
+                    break;
+                case 'v':
+                    verbose = true;
                     break;
                 case 'e':
                     embed = true;
@@ -1139,7 +1152,7 @@ public final class XText implements ExclusionFilter, Converter {
                 }
             }
             // Set itself to listen, as this is the main program.
-            xt.setConversionListener(new MainProgramListener());
+            xt.setConversionListener(new MainProgramListener(verbose));
 
             xt.setup();
             xt.extractText(input);

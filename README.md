@@ -78,6 +78,12 @@ Basic Usage
 RELEASE NOTES
 ================
 
+v3.0.6 SUPERBOWL 2019
+-----------------------------
+- Tika 1.19+
+- Jodd JSON library 5.x
+- bug fix in ConvertedDocument properties API 
+
 v3.0  INDEPENDENCE DAY 2018
 -----------------------------
 - OpenSextant Xponents 3.0 release

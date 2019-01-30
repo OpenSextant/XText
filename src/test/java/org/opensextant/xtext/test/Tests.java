@@ -87,6 +87,7 @@ public class Tests {
                     log.info("No document in cache for " + inputFile.getPath());
                 } else {
                     log.info(doc2.filepath + " TITLE=" + doc2.getProperty("title"));
+                    log.info("\t\tDoc Properties:" + doc2.getProperties().toString());
                 }
             } catch (Exception anyErr) {
                 log.error("Any error could happend:  Unicode file name?  FILE=" + inputFile.getAbsolutePath(), anyErr);
@@ -177,8 +178,8 @@ public class Tests {
 
         //assert(true);
     }
-    
-    static ConvertedDocument saveHTMLdoc= null;
+
+    static ConvertedDocument saveHTMLdoc = null;
 
     @Test
     public void testHTMLConversion() throws IOException, java.net.URISyntaxException {
@@ -207,18 +208,21 @@ public class Tests {
         Tests t = new Tests();
         try {
             t.testHTMLDecode(args[0]);
-             t.testHTMLConversion();
-             
+
             if (args.length > 0) {
                 XText xt = new XText();
                 xt.getPathManager().enableSaveWithInput(true);
                 xt.enableSaving(true);
                 xt.enableOverwrite(true); // reuse cached conversions if possible.
                 xt.setup();
-                xt.getPathManager().saveConversion(saveHTMLdoc);
+                ConvertedDocument userDoc = xt.convertFile(new File(args[0]));
+                xt.getPathManager().saveConversion(userDoc);
 
-                t.trivialUncache(saveHTMLdoc.getTextpath());
+                t.trivialUncache(userDoc.getTextpath());
                 t.trivialInventory(args[0], true);
+            } else {
+                t.testHTMLConversion();
+                t.trivialUncache(saveHTMLdoc.getTextpath());
             }
         } catch (Exception ioerr) {
             ioerr.printStackTrace();
