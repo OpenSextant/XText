@@ -531,7 +531,7 @@ public final class ConvertedDocument extends DocInput {
     }
 
     public long getNumberProperty(String k) {
-        return Long.parseLong(meta.getString(k));
+        return meta.getLong(k);
     }
 
     /*

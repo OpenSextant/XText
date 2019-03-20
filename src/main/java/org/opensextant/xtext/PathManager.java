@@ -672,7 +672,7 @@ public class PathManager {
         // Retrieve values for useful attrs.
         doc.encoding = doc.getProperty("encoding");
         doc.filepath = fpath; /* note: path should already have been normalized, using "/" */
-        doc.filesize = Long.parseLong(doc.getProperty("filesize"));
+        doc.filesize = doc.getNumberProperty("filesize");
         doc.textpath = fconv.getAbsolutePath();
         doc.is_cached = true;
         doc.is_converted = true;
