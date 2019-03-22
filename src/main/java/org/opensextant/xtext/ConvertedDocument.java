@@ -530,8 +530,10 @@ public final class ConvertedDocument extends DocInput {
         meta.put(k, Long.toString(v));
     }
 
+    /** Default values to -1 if not set */
     public long getNumberProperty(String k) {
-        return meta.getLong(k);
+        String v = meta.getString(k, "-1");
+        return Long.parseLong(v);
     }
 
     /*
