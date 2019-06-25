@@ -78,6 +78,10 @@ Basic Usage
 RELEASE NOTES
 ================
 
+v3.1.0 SUMMER SOLSTICE 2019
+- Tika v1.21
+- Xponents 3.1.0
+
 v3.0.6 SUPERBOWL 2019
 -----------------------------
 - Tika 1.19+
