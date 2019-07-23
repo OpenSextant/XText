@@ -78,6 +78,9 @@ Basic Usage
 RELEASE NOTES
 ================
 
+v3.2  DEAD HEAT
+- Xponents core API 3.2 streamlines dependencies -- No solr needed here.
+
 v3.1.0 SUMMER SOLSTICE 2019
 - Tika v1.21
 - Xponents 3.1.0

@@ -4,7 +4,7 @@
 >
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.1.0</version>
+  <version>3.2</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and similar toolkits</description>
@@ -37,8 +37,8 @@
   <dependencies>
     <dependency>
       <groupId>org.opensextant</groupId>
-      <artifactId>opensextant-xponents</artifactId>
-      <version>3.1.0</version>
+      <artifactId>opensextant-xponents-core</artifactId>
+      <version>3.2</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
@@ -49,40 +49,12 @@
           <artifactId>geodesy</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.apache.solr</groupId>
-          <artifactId>solr-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.solr</groupId>
-          <artifactId>solr-solrj</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.opensextant</groupId>
-          <artifactId>solr-text-tagger</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.servlet</groupId>
-          <artifactId>javax.servlet-api</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>com.norconex.language</groupId>
           <artifactId>langdetect</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>com.vividsolutions</groupId>
-          <artifactId>jts</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>org.locationtech.spatial4j</groupId>
           <artifactId>spatial4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.lucene</groupId>
-          <artifactId>lucene-analyzers-common</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.lucene</groupId>
-          <artifactId>lucene-core</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -91,7 +63,12 @@
       <artifactId>java-getopt</artifactId>
       <version>1.0.13</version>
     </dependency>
-    <!-- Override JSON-lib use of old commons-lang 2.5 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.9</version>
+    </dependency>    
+    <!-- Override JSON-lib use of old commons-lang 2.5 -->    
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
@@ -106,7 +83,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.2</version>
+      <version>1.7</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -273,7 +250,7 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>2.0.14</version>
+      <version>2.0.15</version>
       <exclusions>
         <exclusion>
           <artifactId>commons-logging</artifactId>
