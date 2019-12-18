@@ -3,7 +3,7 @@ XText
 ```
     Author: Marc. C. Ubaldino, MITRE Corporation
     Date: 2013-March
-    Updated: 2014-July
+    Updated: 2019-December
     Migrated: Lifted out of Xponents folder 2018. XText is a separate project.
     Copyright MITRE Corporation, 2012-2014
 ```
@@ -67,7 +67,9 @@ Basic Usage
 
   Build:
 
-       ant -f ./build-dist.xml
+       // Build, then make a distribution that is more easily distributed.
+       ant 
+       ant dist  
 
        Or
 
@@ -77,6 +79,9 @@ Basic Usage
 
 RELEASE NOTES
 ================
+
+v3.3  HOLLY JOLLY
+- Xponents Core API 3.3 updated.
 
 v3.2  DEAD HEAT
 - Xponents core API 3.2 streamlines dependencies -- No solr needed here.
@@ -116,11 +121,13 @@ v1.4  ST PATRICK's DAY, 2014
 - Introduced content collectors: Email, web, Sharepoint
 - Added MessageConverter for email traversal, conversion and archiving. 
 - Added OLEConverter to support MS object conversion, e.g. Outlook message files (untested)
-- Added ImageConverter which saves full EXIF header as text and preserves interesting GPS location and date/time as formal metadata that can be retrieved later.
+- Added ImageConverter which saves full EXIF header as text and preserves interesting GPS location and 
+  date/time as formal metadata that can be retrieved later.
 
 v1.0  ST PATRICK's  DAY, 2013
 ------------------------------
 - initial design
-- added Testing archive -- not released;  UBL Letters from SOCOM where released Fall 2012.  They are PDFs and Word docs in English and Arabic.  They offer a good test opportunity.
+- added Testing archive -- not released;  UBL Letters from SOCOM where released Fall 2012.  
+  They are PDFs and Word docs in English and Arabic.  They offer a good test opportunity.
 
 
