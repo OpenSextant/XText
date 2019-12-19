@@ -18,7 +18,16 @@
     </exec>
    </target>
 
-  <target name="dist" depends="build">
+  <target name="package">
+    <exec executable="mvn" dir="${xtext.home}" failonerror="true">
+      <arg value="-DincludeScope=test"/>
+      <arg value="-DincludeScope=runtime"/>
+      <arg value="-DincludeScope=compile"/>
+      <arg value="dependency:copy-dependencies"/>
+    </exec>
+  </target>
+
+  <target name="dist" depends="package">
     <delete dir="${xtext.release}"/>
     <mkdir dir="${xtext.release}"/>
     <mkdir dir="${xtext.release}/lib"/>
@@ -36,6 +45,7 @@
     <copy todir="${xtext.release}/etc/">
         <fileset dir="${xtext.home}/etc">
            <include name="logback.*" />
+           <include name="tika*" />
         </fileset>
     	</copy>
 
