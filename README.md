@@ -74,6 +74,14 @@ Basic Usage
        Or
 
        mvn install 
+
+
+  Publish via Maven:
+      // 
+      //  Fix all versions to be release versions.
+      //  Ensure GPG key is known...
+      // and OSSRH login is set in settings.xml
+      mvn clean deploy -P release
 ```
   
 
