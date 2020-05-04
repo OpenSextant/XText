@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><!-- -*- indent-tabs-mode: nil -*- -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.3.0</version>
+  <version>3.3.5</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
-  <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and similar toolkits</description>
+  <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
+        similar toolkits
+    </description>
   <inceptionYear>2013</inceptionYear>
   <url>https://opensextant.github.io/XText</url>
   <scm>
@@ -38,7 +40,7 @@
     <dependency>
       <groupId>org.opensextant</groupId>
       <artifactId>opensextant-xponents-core</artifactId>
-      <version>3.3.0</version>
+      <version>3.3.5</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
@@ -67,8 +69,8 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.9</version>
-    </dependency>    
-    <!-- Override JSON-lib use of old commons-lang 2.5 -->    
+    </dependency>
+    <!-- Override JSON-lib use of old commons-lang 2.5 -->
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
@@ -88,7 +90,7 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.12</version>
+      <version>1.14</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -106,8 +108,8 @@
       <artifactId>commons-compress</artifactId>
       <version>1.19</version>
     </dependency>
-    <!-- Tika Dependencies: lots of fixes from PDFBox and POI; Over millions of documents converted we have seen lots of 
-      Tika parser errors. -->
+    <!-- Tika Dependencies: lots of fixes from PDFBox and POI; Over millions 
+      of documents converted we have seen lots of Tika parser errors. -->
     <dependency>
       <groupId>com.pff</groupId>
       <artifactId>java-libpst</artifactId>
@@ -131,20 +133,6 @@
           <artifactId>pdfbox</artifactId>
           <groupId>org.apache.pdfbox</groupId>
         </exclusion>
-        <!--   
-        <exclusion>
-          <artifactId>poi</artifactId>
-          <groupId>org.apache.poi</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>poi-scratchpad</artifactId>
-          <groupId>org.apache.poi</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>poi-ooxml</artifactId>
-          <groupId>org.apache.poi</groupId>
-        </exclusion>
-        -->
         <exclusion>
           <artifactId>commons-logging</artifactId>
           <groupId>commons-logging</groupId>
@@ -336,7 +324,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.12</version>
+        <version>4.13</version>
         <scope>test</scope>
       </dependency>
       <!-- Logging -->
@@ -358,42 +346,42 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.1.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
+          <version>3.8.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.2.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
+          <version>3.0.0-M1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>2.6</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.20.1</version>
+          <version>3.0.0-M4</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -403,6 +391,27 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <header>&lt;img alt='[OpenSextant Logo]' height='36'
+            width='36'
+            src='doc-files/opensextant-manual-logo.png'/&gt;&lt;br&gt;copyright
+            OpenSextant.org, 2013-2020
+          </header>
+          <version>true</version>
+          <windowtitle>XText - Content Extraction Simplified</windowtitle>
+          <detectJavaApiLink>false</detectJavaApiLink>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadoc</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -520,24 +529,6 @@
       <id>release</id>
       <build>
         <plugins>
-          <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <configuration>
-              <header>&lt;img alt='[OpenSextant Logo]' height='36' width='36'
-                src='doc-files/opensextant-manual-logo.png'/&gt;&lt;br&gt;copyright OpenSextant.org, 2013-2017 
-              </header>
-              <version>true</version>
-              <windowtitle>XText - Content Extraction Simplified</windowtitle>
-            </configuration>
-            <executions>
-              <execution>
-                <id>attach-javadoc</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <artifactId>maven-source-plugin</artifactId>
             <executions>
