@@ -15,10 +15,11 @@
  */
 package org.opensextant.xtext.test;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -27,8 +28,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opensextant.ConfigException;
 import org.opensextant.util.FileUtility;
-import org.opensextant.xtext.*;
-import org.opensextant.xtext.converters.*;
+import org.opensextant.xtext.ConversionListener;
+import org.opensextant.xtext.ConvertedDocument;
+import org.opensextant.xtext.PathManager;
+import org.opensextant.xtext.XText;
+import org.opensextant.xtext.converters.TikaHTMLConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,12 +49,12 @@ public class Tests {
     public static void createPlayground() throws IOException {
 
         // change to a temp directory that is java 1.6 compliant
-        //tempDir = Files.createTempDirectory("xtext_test").toFile();
+        // tempDir = Files.createTempDirectory("xtext_test").toFile();
         File t = File.createTempFile("xtext_text", "");
         tempDir = new File(t.getAbsolutePath() + "_d");
         tempDir.mkdir();
 
-        //test tmp file delete
+        // test tmp file delete
         t.delete();
 
         doc = new File(tempDir, "simple-test.pdf");
@@ -64,17 +68,16 @@ public class Tests {
         }
     }
 
-    //@Test
+    // @Test
     public void testTrivialUncache() throws IOException {
         trivialUncache(doc.getCanonicalPath());
     }
 
     /**
-     * Test the uncaching of content. Account for any unknown exception --
-     * Unicode File names is not well-understood. LANG=en_US env allows Java to
-     * read in file names with unicode chars. .... otherwise this is an
-     * undetectable situation and File(unicode_filename).exists() throws bad
-     * error.
+     * Test the uncaching of content. Account for any unknown exception -- Unicode
+     * File names is not well-understood. LANG=en_US env allows Java to read in file
+     * names with unicode chars. .... otherwise this is an undetectable situation
+     * and File(unicode_filename).exists() throws bad error.
      */
     public void trivialUncache(String input) throws IOException {
         String[] types = { "txt" };
@@ -136,7 +139,7 @@ public class Tests {
 
     @Test
     public void parseBareFilename() throws IOException, ConfigException {
-        URL item = Test.class.getResource("/4567891230" /* Copy:Headers PPT file*/);
+        URL item = Test.class.getResource("/4567891230" /* Copy:Headers PPT file */);
         String input = item.getFile();
         File f = new File(input);
         XText xt = new XText();
@@ -176,7 +179,7 @@ public class Tests {
         });
         xt.extractText(input);
 
-        //assert(true);
+        // assert(true);
     }
 
     static ConvertedDocument saveHTMLdoc = null;

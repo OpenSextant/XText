@@ -50,7 +50,8 @@ public class MessageConverterTest {
     @BeforeClass
     public static void setupTemporaryFolder() throws IOException {
         TEST_FILE = TEMP_DIR.newFile("mimeEmailWithAttachmentsTest.eml");
-        FileUtils.copyInputStreamToFile(MessageConverterTest.class.getResourceAsStream("mimeEmailWithAttachmentsTest.eml"), TEST_FILE);
+        FileUtils.copyInputStreamToFile(
+                MessageConverterTest.class.getResourceAsStream("mimeEmailWithAttachmentsTest.eml"), TEST_FILE);
     }
 
     @Test
@@ -66,9 +67,11 @@ public class MessageConverterTest {
         }
 
         Content text_attach = children.get("xtext-embedded-attached-text.txt");
-        Assert.assertNotNull("text attachment was not found, available attachments are: " + children.keySet(), text_attach);
+        Assert.assertNotNull("text attachment was not found, available attachments are: " + children.keySet(),
+                text_attach);
 
-        String orig_text_attach = IOUtils.toString(getClass().getResourceAsStream("xtext-embedded-attached-text.txt"), "UTF-8");
+        String orig_text_attach = IOUtils.toString(getClass().getResourceAsStream("xtext-embedded-attached-text.txt"),
+                "UTF-8");
         String sep = System.getProperty("line.separator");
         if (!"\r\n".equals(sep)) {
             orig_text_attach = orig_text_attach.replaceAll(sep, "\r\n");
@@ -85,7 +88,8 @@ public class MessageConverterTest {
         Assert.assertEquals("attachment", html_attach.meta.getProperty(CONTENT_DISPOSITION));
         Content word_attach = children.get("doc_with_embedded_geocoded_image2.docx");
         Assert.assertNotNull("Doc with geocoded image was not found.", word_attach);
-        Assert.assertEquals("application/vnd.openxmlformats-officedocument.wordprocessingml.document", new MimeType(word_attach.mimeType).getBaseType());
+        Assert.assertEquals("application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                new MimeType(word_attach.mimeType).getBaseType());
         Assert.assertTrue(word_attach.meta.getProperty(CONTENT_ID).startsWith("3ED3B89ABF3D1840B551B527B4DA054D"));
         Assert.assertEquals("attachment", word_attach.meta.getProperty(CONTENT_DISPOSITION));
         Content jpeg_attach = children.get("android_photo_with_gps1.jpeg");
@@ -107,14 +111,9 @@ public class MessageConverterTest {
         Assert.assertNotNull("html body was not found", htmlbody);
     }
 
-    private static final String MESSAGE_BODY = "This is a test of a mime message with several different parsing options.\n" +
-            "\n" +
-            "This is bold.\n" +
-            "Here is a geotagged image.\n" +
-            "[cid:485710da-7b60-461a-a566-0ad2e0a14b82@opensextant.org]\n" +
-            "\n" +
-            "It should be inline. Afterwards there will be some additional attachments.\n" +
-            "\n" +
-            "John\n\n";
+    private static final String MESSAGE_BODY = "This is a test of a mime message with several different parsing options.\n"
+            + "\n" + "This is bold.\n" + "Here is a geotagged image.\n"
+            + "[cid:485710da-7b60-461a-a566-0ad2e0a14b82@opensextant.org]\n" + "\n"
+            + "It should be inline. Afterwards there will be some additional attachments.\n" + "\n" + "John\n\n";
     private static final String MESSAGE_BOUNDARY = "\n*******************\n";
 }

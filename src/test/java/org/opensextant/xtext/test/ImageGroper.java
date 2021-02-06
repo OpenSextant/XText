@@ -2,7 +2,6 @@ package org.opensextant.xtext.test;
 
 import java.io.IOException;
 
-import org.opensextant.ConfigException;
 import org.opensextant.xtext.XText;
 
 public class ImageGroper {

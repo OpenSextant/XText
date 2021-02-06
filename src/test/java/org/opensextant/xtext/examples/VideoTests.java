@@ -10,7 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A trivial test program that allows you to see if Tika will get text by default from Video file formats you have.
+ * A trivial test program that allows you to see if Tika will get text by
+ * default from Video file formats you have.
  */
 public class VideoTests implements ConversionListener {
     Logger log = LoggerFactory.getLogger(getClass());
@@ -36,11 +37,13 @@ public class VideoTests implements ConversionListener {
     }
 
     public void handleConversion(ConvertedDocument d, String fpath) {
-        log.info("FILE=" + d.filename + " Converted?=" + d.is_converted + " ID={} PATH={}", d.id,
-                fpath);
+        log.info("FILE=" + d.filename + " Converted?=" + d.is_converted + " ID={} PATH={}", d.id, fpath);
 
-        /* Set your document ID to something meaningful.  MD5 or SHA1 the content, filename, metadata, etc.*/
-        d.id = "DOCID"+fpath;
+        /*
+         * Set your document ID to something meaningful. MD5 or SHA1 the content,
+         * filename, metadata, etc.
+         */
+        d.id = "DOCID" + fpath;
         log.info("\t\tTry resetting Doc ID to default ID = " + d.id);
     }
 

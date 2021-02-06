@@ -7,11 +7,12 @@ import org.opensextant.xtext.XText;
 
 public class TestTikaPST {
 
-    /** Compare Tika's PST conversion to XText non-Tika PST conversion.
+    /**
+     * Compare Tika's PST conversion to XText non-Tika PST conversion.
      */
     public static void main(String args[]) {
 
-        String input = args[0]; // Path to a PST.  NOTE, java-libpst provides some good test data.
+        String input = args[0]; // Path to a PST. NOTE, java-libpst provides some good test data.
 
         try {
             XText xt = new XText();

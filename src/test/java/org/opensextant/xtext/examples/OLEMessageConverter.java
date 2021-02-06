@@ -26,12 +26,16 @@ public class OLEMessageConverter extends ConverterAdapter {
         try {
             msg = new MAPIMessage(in);
 
-            // If your message is Latin-1 text... there is no real easy way to get bytes of raw message text
+            // If your message is Latin-1 text... there is no real easy way to get bytes of
+            // raw message text
             // to ensure it is UTF-8
             // TextTranscodingConverter.setTextAndEncoding(doc, msg.getM);
             // By default this may be UTF-8 text.
             msgDoc.setText(msg.getTextBody());
-            /* Would prefer not to set encoding here without knowing  or attempting to derive it properly */
+            /*
+             * Would prefer not to set encoding here without knowing or attempting to derive
+             * it properly
+             */
             msgDoc.setEncoding(ConvertedDocument.OUTPUT_ENCODING);
 
             AttachmentChunks[] chunks = msg.getAttachmentFiles();
@@ -54,7 +58,7 @@ public class OLEMessageConverter extends ConverterAdapter {
             try {
                 msgDoc.addCreateDate(msg.getMessageDate());
             } catch (ChunkNotFoundException err) {
-                // 
+                //
             }
 
             // Get author.

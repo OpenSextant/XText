@@ -1,12 +1,11 @@
 package org.opensextant.xtext.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
-import org.opensextant.xtext.collectors.sharepoint.SPLink;
 import org.opensextant.xtext.collectors.web.HyperLink;
 
 public class WebLinkTest {
@@ -20,8 +19,8 @@ public class WebLinkTest {
     }
 
     /**
-     * Tests to see how URLs are mapped to files on disk.  That is, without special chars
-     * and choosing best MIME type and file ext.
+     * Tests to see how URLs are mapped to files on disk. That is, without special
+     * chars and choosing best MIME type and file ext.
      */
     @Test
     public void test() {

@@ -5,14 +5,16 @@ import java.net.URL;
 
 import javax.mail.MessagingException;
 
+import org.opensextant.xtext.collectors.mailbox.MailClient;
 //import org.opensextant.ConfigException;
 import org.opensextant.xtext.collectors.mailbox.MailConfig;
-import org.opensextant.xtext.collectors.mailbox.MailClient;
 
 public class MailClientTest {
 
     /**
-     * Simple connection demo.  No mail reading... just configure, connect, disconnect.
+     * Simple connection demo. No mail reading... just configure, connect,
+     * disconnect.
+     * 
      * @param args
      */
     public static void main(String[] args) {
@@ -21,7 +23,7 @@ public class MailClientTest {
             MailConfig imapClientCfg;
             URL abc = MailClient.class.getResource(args[0]);
             imapClientCfg = new MailConfig(abc);
-            
+
             MailClient imapClient = new MailClient(imapClientCfg, args[1]);
             imapClient.connect();
             imapClient.disconnect();
