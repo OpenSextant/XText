@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.3.6</version>
+  <version>3.3.7</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>org.opensextant</groupId>
       <artifactId>opensextant-xponents-core</artifactId>
-      <version>3.3.6</version>
+      <version>3.3.7</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
@@ -238,7 +238,7 @@
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
-      <version>2.0.21</version>
+      <version>2.0.22</version>
       <exclusions>
         <exclusion>
           <artifactId>commons-logging</artifactId>
@@ -255,7 +255,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>fluent-hc</artifactId>
-      <version>4.5.10</version>
+      <version>4.5.13</version>
       <scope>runtime</scope>
       <exclusions>
         <exclusion>
@@ -267,7 +267,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient-cache</artifactId>
-      <version>4.5.10</version>
+      <version>4.5.13</version>
       <scope>runtime</scope>
       <exclusions>
         <exclusion>
@@ -279,7 +279,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.5.10</version>
+      <version>4.5.13</version>
       <exclusions>
         <exclusion>
           <artifactId>commons-logging</artifactId>
@@ -290,12 +290,12 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.4.12</version>
+      <version>4.4.14</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpmime</artifactId>
-      <version>4.5.10</version>
+      <version>4.5.13</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
@@ -388,6 +388,11 @@
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>3.0.5</version>
         </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.8.0.2131</version>
+        </plugin>        
       </plugins>
     </pluginManagement>
     <plugins>
