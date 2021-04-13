@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.3.7</version>
+  <version>3.4.0-SNAPSHOT</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>org.opensextant</groupId>
       <artifactId>opensextant-xponents-core</artifactId>
-      <version>3.3.7</version>
+      <version>3.4.0-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
