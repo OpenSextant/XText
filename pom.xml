@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.4.0-SNAPSHOT</version>
+  <version>3.4.0</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>org.opensextant</groupId>
       <artifactId>opensextant-xponents-core</artifactId>
-      <version>3.4.0-SNAPSHOT</version>
+      <version>3.4.0</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
@@ -64,11 +64,12 @@
       <groupId>gnu.getopt</groupId>
       <artifactId>java-getopt</artifactId>
       <version>1.0.13</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.9</version>
+      <version>3.12.0</version>
     </dependency>
     <!-- Override JSON-lib use of old commons-lang 2.5 -->
     <dependency>
@@ -85,17 +86,17 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.8</version>
+      <version>1.9</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.14</version>
+      <version>1.15</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.6</version>
+      <version>2.8.0</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
@@ -106,14 +107,14 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.19</version>
+      <version>1.20</version>
     </dependency>
     <!-- Tika Dependencies: lots of fixes from PDFBox and POI; Over millions 
       of documents converted we have seen lots of Tika parser errors. -->
     <dependency>
       <groupId>com.pff</groupId>
       <artifactId>java-libpst</artifactId>
-      <version>0.8.1</version>
+      <version>0.9.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tika</groupId>
@@ -300,7 +301,7 @@
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
-      <version>2.10.1</version>
+      <version>2.10.6</version>
     </dependency>
     <dependency>
       <groupId>de.l3s.boilerpipe</groupId>
@@ -324,7 +325,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.13</version>
+        <version>4.13.1</version>
         <scope>test</scope>
       </dependency>
       <!-- Logging -->
@@ -372,6 +373,14 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.2.0</version>
+          <executions>
+              <execution>
+                <id>attach-tests</id>
+                <goals>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -541,17 +550,6 @@
                 <id>attach-sources</id>
                 <goals>
                   <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-tests</id>
-                <goals>
-                  <goal>test-jar</goal>
                 </goals>
               </execution>
             </executions>

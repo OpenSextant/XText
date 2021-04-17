@@ -13,5 +13,5 @@ set logconf=%scriptdir:\=/%
 set logfile=%basedir%\logs\xtext-stderr.log
 logging_opts="-Dlogback.configurationFile=%basedir%\etc\logback.xml  -Dtika.config=%basedir%\etc\tika-config.xml"
 
-java %logging_opts% -Dxtext.home="%basedir%"  -Xmx512m  -classpath "%basedir%\lib\*;%basedir%\etc" org.opensextant.xtext.XText  --input=%1 --output=%2 --export=%3 
+java %logging_opts% -Dxtext.home="%basedir%"  -Xmx512m  -classpath "%basedir%\lib\*;%basedir%\etc" ExtractText  --input=%1 --output=%2 --export=%3 
 REM >%logfile% 2>&1 
