@@ -3,7 +3,7 @@ XText
 ```
     Author: Marc. C. Ubaldino, MITRE Corporation
     Date: 2013-March
-    Updated: 2019-December
+    Updated: 2021-April
     Migrated: Lifted out of Xponents folder 2018. XText is a separate project.
     Copyright MITRE Corporation, 2012-2014
 ```
@@ -51,42 +51,49 @@ Supported customizations:
 
 Basic Usage
 -----------
+
+* Running it: From a release, see
+
 ```
+    ./script/README_convert.txt
+    ./script/convert.sh or convert.bat script
 
-  Running it: From a release, see
+    USAGE: 
+    ./script/convert.sh   -input FOLDER -output FOLDER  [ other options ]
 
-       ./script/README_convert.txt
-       ./script/convert.sh or convert.bat script
-
-       USAGE: 
-       ./script/convert.sh   -input FOLDER -output FOLDER  [ other options ]
-
-       ANT: 
-       ant -f ./script/xtext-ant.xml -Dinputfile=./test/somestuff/  convert
+    ANT: 
+    ant -f ./script/xtext-ant.xml -Dinputfile=./test/somestuff/  convert
+```
        
 
-  Build:
+* Build:
 
-       // Build, then make a distribution that is more easily distributed.
-       ant 
-       ant dist  
+```
+    // Build, then make a distribution that is more easily distributed.
+    ant 
+    ant dist  
 
-       Or
+    Or
 
-       mvn install 
+    mvn install 
+```
 
 
-  Publish via Maven:
-      // 
-      //  Fix all versions to be release versions.
-      //  Ensure GPG key is known...
-      // and OSSRH login is set in settings.xml
-      mvn clean deploy -P release
+* Publish via Maven:
+
+```
+    // 
+    //  Fix all versions to be release versions.
+    //  Ensure GPG key is known...
+    // and OSSRH login is set in settings.xml
+    mvn clean deploy -P release
 ```
   
 
 RELEASE NOTES
 ================
+v3.4  VAMP
+- Xponents Core API 3.4 updated.
 
 v3.3  HOLLY JOLLY
 - Xponents Core API 3.3 updated.
