@@ -107,7 +107,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.20</version>
+      <version>1.21</version>
     </dependency>
     <!-- Tika Dependencies: lots of fixes from PDFBox and POI; Over millions 
       of documents converted we have seen lots of Tika parser errors. -->
