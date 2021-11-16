@@ -1,20 +1,3 @@
-/*
- *
- *      Copyright 2012-2013 The MITRE Corporation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
 /// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 //
 // _____                                ____                     __                       __
@@ -28,6 +11,7 @@
 //             \/_/
 //
 //   OpenSextant XText
+//   Copyright 2012-2021 MITRE
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 // 
 package org.opensextant.xtext;
@@ -63,6 +47,7 @@ import org.opensextant.xtext.converters.MessageConverter;
 import org.opensextant.xtext.converters.TextTranscodingConverter;
 import org.opensextant.xtext.converters.TikaHTMLConverter;
 import org.opensextant.xtext.converters.WebArchiveConverter;
+import org.opensextant.xtext.converters.OfficeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,16 +111,16 @@ public final class XText implements ExclusionFilter, Converter {
     private final int maxHTMLBuffer = 5 * maxBuffer;
     private long maxFileSize = FILE_SIZE_LIMIT;
 
-    protected Set<String> archiveFileTypes = new HashSet<String>();
+    protected Set<String> archiveFileTypes = new HashSet<>();
 
     /**
      *
      */
-    public static Map<String, Converter> converters = new HashMap<String, Converter>();
+    public static Map<String, Converter> converters = new HashMap<>();
     private Converter defaultConversion;
     private Converter embeddedConversion;
-    private final Set<String> requestedFileTypes = new HashSet<String>();
-    private final Set<String> ignoreFileTypes = new HashSet<String>();
+    private final Set<String> requestedFileTypes = new HashSet<>();
+    private final Set<String> ignoreFileTypes = new HashSet<>();
     private boolean allowNoExtension = false;
 
     /**
@@ -682,14 +667,8 @@ public final class XText implements ExclusionFilter, Converter {
             long t2 = System.currentTimeMillis();
             int duration = (int) (t2 - t1);
             if (textDoc != null) {
-                // Buffer can be null. If you got this far, you are interested
-                // in the file, as it passed
-                // all filters above. Return the document with whatever metadata
-                // it found.
-                // if (textDoc.buffer == null) {
-                // throw new
-                // IOException("Engineering error: Doc converted, but converter failed to setText()");
-                // }
+                // Buffer can be null. If you got this far, you are interested in the file, as it passed
+                // all filters above. Return the document with whatever metadata it found.
                 if (paths.isSaving() && textDoc.is_converted) {
                     // Get Parent info in there.
                     if (parent != null) {
@@ -935,7 +914,9 @@ public final class XText implements ExclusionFilter, Converter {
             requestedFileTypes.add("xhtml");
         }
 
-        MessageConverter emailParser = new MessageConverter();
+        boolean useMSOffice = false;
+        Converter emailParser = useMSOffice ? new OfficeConverter() : new MessageConverter();
+
         mimetype = "eml";
         if (requestedFileTypes.contains(mimetype)) {
             converters.put(mimetype, emailParser);
