@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 
 import org.opensextant.xtext.collectors.Collector;
@@ -57,9 +58,6 @@ public class SPLink extends HyperLink {
         if (isAbsolute()) {
             absoluteURL = new URL(urlValue);
         } else {
-            if (base == null) {
-                throw new MalformedURLException("Unknown parent URL for arg baseUrl");
-            }
             referrerURL = base; // aka Parent or containing page, folder or
             // other node
             absoluteURL = new URL(referrerURL, urlValue);
@@ -83,7 +81,7 @@ public class SPLink extends HyperLink {
 
     public final String encodePathSegment(String s) throws UnsupportedEncodingException {
         StringBuilder buf = new StringBuilder();
-        byte[] b = s.getBytes("UTF-8");
+        byte[] b = s.getBytes(StandardCharsets.UTF_8);
         for (byte bt : b) {
             if (isAlphanum(bt)) {
                 buf.append((char)bt);

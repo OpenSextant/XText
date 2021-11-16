@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -71,7 +71,7 @@ public class WebClient {
      *             the malformed url exception
      */
     public static URL prepURL(String u) throws MalformedURLException {
-        /**
+        /*
          * TODO: require outside caller encode URL properly.
          * For now, whitespace is only main issue.
          */
@@ -89,7 +89,7 @@ public class WebClient {
      *             the malformed url exception
      */
     public static String prepURLPath(String u) throws MalformedURLException {
-        /**
+        /*
          * TODO: require outside caller encode URL properly.
          * For now, whitespace is only main issue.
          */
@@ -191,10 +191,10 @@ public class WebClient {
     }
 
     /** */
-    protected Map<String, HyperLink> found = new HashMap<String, HyperLink>();
+    protected Map<String, HyperLink> found = new HashMap<>();
 
     /** */
-    protected Set<String> saved = new HashSet<String>();
+    protected Set<String> saved = new HashSet<>();
 
     /**
      * current depth of the crawl at any time.
@@ -311,7 +311,6 @@ public class WebClient {
 
         try {
             getPage(site);
-            return;
         } catch (Exception err) {
             throw new ConfigException(
                     String.format("%s failed to collect URL %s", getName(), site), err);
@@ -406,7 +405,7 @@ public class WebClient {
      * @return a list of found links
      */
     public Collection<HyperLink> parseContentPage(String html, URL pageUrl, URL siteUrl) {
-        Map<String, HyperLink> contentLinks = new HashMap<String, HyperLink>();
+        Map<String, HyperLink> contentLinks = new HashMap<>();
         Matcher matches = HREF_MATCH.matcher(html);
         while (matches.find()) {
             String link = matches.group(1).trim();

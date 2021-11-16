@@ -15,17 +15,18 @@
  */
 package org.opensextant.xtext.converters;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.tika.io.TikaInputStream;
 import org.opensextant.xtext.ConvertedDocument;
 import org.opensextant.xtext.Converter;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 // TODO: Auto-generated Javadoc
+
 /**
  * The Class ConverterAdapter.
  *
@@ -36,7 +37,7 @@ public abstract class ConverterAdapter implements Converter {
     /**
      * Conversion implementation.
      *
-     * @param in the in
+     * @param in  the in
      * @param doc the doc
      * @return the converted document
      * @throws IOException Signals that an I/O exception has occurred.
@@ -61,7 +62,7 @@ public abstract class ConverterAdapter implements Converter {
      * Yield a ConvertedDocument with no File metadata. Underlying
      * implementation opens and closes a stream to read the string. Metadata is
      * derived solely from the text provided, e.g., length, conversion time,
-     * encoding.  Defaults to UTF-8 charset 
+     * encoding.  Defaults to UTF-8 charset
      *
      * @param data stream
      * @return the converted document
@@ -69,7 +70,7 @@ public abstract class ConverterAdapter implements Converter {
      */
     @Override
     public ConvertedDocument convert(String data) throws IOException {
-        return conversionImplementation(TikaInputStream.get(IOUtils.toInputStream(data, Charset.forName("UTF-8"))), null);
+        return conversionImplementation(TikaInputStream.get(IOUtils.toInputStream(data, StandardCharsets.UTF_8)), null);
     }
 
     /**
@@ -78,7 +79,7 @@ public abstract class ConverterAdapter implements Converter {
      * a stream to read the file. In other words implementation of converters
      * should close the given input stream.
      *
-     * @param doc  raw file
+     * @param doc raw file
      * @return the converted document
      * @throws IOException on err
      */

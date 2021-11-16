@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -131,7 +131,6 @@ public class MailClient {
             String msg = String.format("%s -- failed to collect mail account", getName());
             throw new ConfigException(msg, err);
         }
-        return;
     }
 
     public void configure() throws ConfigException {

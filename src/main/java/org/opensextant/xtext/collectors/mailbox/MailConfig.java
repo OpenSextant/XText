@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,6 +17,10 @@
 
 package org.opensextant.xtext.collectors.mailbox;
 
+import com.sun.mail.util.MailSSLSocketFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.opensextant.ConfigException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,18 +29,12 @@ import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
-import org.opensextant.ConfigException;
-
-import com.sun.mail.util.MailSSLSocketFactory;
-
 /**
  * See reference property file at src/test/resources/collectors/imap-templ.cfg
  * This IMAP template documents the various parameters for configuring a Java mail client to use IMAP or IMAP/SSL
  *
  * @author ubaldino
  * @author b. o'neill
- *
  */
 public class MailConfig extends Properties {
 
@@ -83,7 +81,7 @@ public class MailConfig extends Properties {
      * given confg file.
      *
      * @param propsFilePath path to property sheet
-     * @throws IOException on err, likely SSL 
+     * @throws IOException     on err, likely SSL
      * @throws ConfigException on err
      */
     public MailConfig(String propsFilePath) throws IOException, ConfigException {
@@ -97,9 +95,9 @@ public class MailConfig extends Properties {
         setProperties();
     }
 
-    public MailConfig(URL cfgUrl) throws IOException, ConfigException {
+    public MailConfig(URL cfgUrl) throws IOException {
         super(System.getProperties());
-        if (cfgUrl == null){
+        if (cfgUrl == null) {
             throw new ConfigException("Mail Configuration not found");
         }
 
@@ -113,11 +111,11 @@ public class MailConfig extends Properties {
     /**
      * Given this configuration, determine if the messages read so far (curr) is
      * at the total available
-     *
+     * <p>
      * or if config specified a max read count, then if curr &gt; max read, return
      * true.
      *
-     * @param total  total available.
+     * @param total total available.
      * @param curr  current incrementor.
      * @return true if client/session is done reading available msgs
      */
@@ -144,7 +142,7 @@ public class MailConfig extends Properties {
      * Set properties from existing Property sheet.
      *
      * @param props javamail props
-     * @throws ConfigException  SSL or other property error
+     * @throws ConfigException SSL or other property error
      */
     public void setProperties(Properties props) throws ConfigException {
 
@@ -170,7 +168,6 @@ public class MailConfig extends Properties {
     }
 
     /**
-     *
      * @throws ConfigException SSL-related problem, e.g., keystore does not exist.
      */
     private void validateCertificates() throws ConfigException {
@@ -178,7 +175,7 @@ public class MailConfig extends Properties {
             return;
         }
         if (!new File(getKeyStore()).exists()) {
-            throw new ConfigException("Keystore set, but is invalid file: "+getKeyStore());
+            throw new ConfigException("Keystore set, but is invalid file: " + getKeyStore());
         }
         System.setProperty("javax.net.ssl.keyStore", getKeyStore());
 
@@ -255,6 +252,7 @@ public class MailConfig extends Properties {
      *     mail.imap.socketFactory.class
      *
      * </pre>
+     *
      * @return if relevant javamail properties were set.
      */
     protected boolean setConfiguration() {
@@ -302,7 +300,8 @@ public class MailConfig extends Properties {
 
     /**
      * A conveneince wrapper around setting the SSL socket factory and other parameters.
-     * @throws GeneralSecurityException  error related to mail/socket factory or other issue
+     *
+     * @throws GeneralSecurityException error related to mail/socket factory or other issue
      */
     public void setAdvancedSettings() throws GeneralSecurityException {
 
@@ -310,9 +309,6 @@ public class MailConfig extends Properties {
             MailSSLSocketFactory socketFactory = new MailSSLSocketFactory();
             socketFactory.setTrustAllHosts(true);
             this.put("mail.imaps.ssl.socketFactory", socketFactory);
-            // Default?
-            // setProperty("mail.imap.socketFactory.class",
-            // "javax.net.ssl.SSLSocketFactory");
         }
     }
 
@@ -323,7 +319,7 @@ public class MailConfig extends Properties {
     /**
      * Return -1 if unknown or if it does not matter. 2003, 2007, 2010
      *
-     * @return  int representing year/version of MS Exchange
+     * @return int representing year/version of MS Exchange
      */
     public int getExchangeServerVersion() {
         return exchangeServer;
@@ -416,11 +412,7 @@ public class MailConfig extends Properties {
     }
 
     public void setMaxMessagesToRead(int maxMessagesToRead) {
-        if (maxMessagesToRead <= READ_ALL) {
-            this.maxMessagesToRead = READ_ALL;
-        } else {
-            this.maxMessagesToRead = maxMessagesToRead;
-        }
+        this.maxMessagesToRead = Math.max(READ_ALL, maxMessagesToRead);
     }
 
     public boolean isReadOnly() {

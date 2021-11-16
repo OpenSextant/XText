@@ -123,16 +123,8 @@ public class ArchiveNavigator implements Collector {
      * so there may be Zip-specific stuff here, ... but the approach is the
      * same.
      */
-    public File unzip(File zipFile) throws IOException, ConfigException {
+    public File unzip(File zipFile) throws IOException {
 
-        // String _working = FilenameUtils.concat(getWorkingDir(),
-        // FilenameUtils.getBaseName(zipFile.getPath()));
-        // if (_working == null){
-        // throw new IOException("Invalid archive path for "+zipFile.getPath());
-        // }
-
-        // File workingDir = new File(_working);
-        // workingDir.mkdir();
         File workingDir = saveDir;
 
         InputStream input = new BufferedInputStream(new FileInputStream(zipFile));
@@ -168,8 +160,8 @@ public class ArchiveNavigator implements Collector {
 
     /**
      *
-     * @param theFile
-     * @param fname
+     * @param theFile archive file
+     * @param fname filename
      * @return TAR file path for result.
      * @throws IOException on I/O failure
      */
@@ -205,7 +197,7 @@ public class ArchiveNavigator implements Collector {
      * the file converter. The converter can choose to do something else with
      * them.
      */
-    public File untar(File tarFile) throws IOException, ConfigException {
+    public File untar(File tarFile) throws IOException {
 
         String _working = FilenameUtils.concat(getWorkingDir(),
                 FilenameUtils.getBaseName(tarFile.getPath()));
@@ -247,18 +239,19 @@ public class ArchiveNavigator implements Collector {
     /**
      * save to root dir
      *
-     * @param E
-     * @param archiveio
-     * @param root
-     * @return
+     * @param e archive entry
+     * @param archiveio inputstream
+     * @param root root folder
+     * @return output folder where archive was expanded/converted
      * @throws IOException if entry could not be saved to disk, e.g., outputDir
      */
-    private File saveArchiveEntry(ArchiveEntry E, InputStream archiveio, File root)
+    private File saveArchiveEntry(ArchiveEntry e, InputStream archiveio, File root)
             throws IOException {
-        return saveArchiveEntry(E, archiveio, root.getAbsolutePath());
+        return saveArchiveEntry(e, archiveio, root.getAbsolutePath());
     }
 
-    /** */
+    /**
+     */
     private File saveArchiveEntry(ArchiveEntry E, InputStream archiveio, String root)
             throws IOException {
 

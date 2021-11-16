@@ -1,4 +1,4 @@
-/**
+/*
  *
  *      Copyright 2012-2013 The MITRE Corporation.
  *
@@ -74,7 +74,11 @@ public class WebArchiveConverter extends MessageConverter {
         }
 
         if (d.hasText()) {
-            d.setText(d.getText() + "\n\n==================\n\n" + buf.toString());
+            StringBuilder tmp = new StringBuilder();
+            tmp.append(d.getText());
+            tmp.append("\n\n==================\n\n");
+            tmp.append(buf);
+            d.setText(tmp.toString());
         } else {
             d.setText(buf.toString());
         }

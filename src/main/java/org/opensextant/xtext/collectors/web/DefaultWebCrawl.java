@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -228,9 +228,6 @@ public class DefaultWebCrawl extends WebClient implements ExclusionFilter, Colle
         String rawData = WebClient.readTextStream(page.getEntity().getContent());
 
         String thisPath = thisLink.getNormalPath();
-        //if (StringUtils.isEmpty(thisPath)) {
-        //    return;
-        //}
         if (thisLink.isDynamic() && (!thisPath.endsWith("html"))) {
             thisPath = String.format("%s.html", thisPath);
         }
@@ -461,7 +458,7 @@ public class DefaultWebCrawl extends WebClient implements ExclusionFilter, Colle
             return;
         }
 
-        /**
+        /*
          * Convert the item.
          */
         ConvertedDocument doc = null;

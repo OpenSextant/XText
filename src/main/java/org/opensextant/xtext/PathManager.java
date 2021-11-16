@@ -1,20 +1,19 @@
-/*
- *
- *      Copyright 2012-2013 The MITRE Corporation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+/// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+//
+// _____                                ____                     __                       __
+///\  __`\                             /\  _`\                  /\ \__                   /\ \__
+//\ \ \/\ \   _____      __     ___    \ \,\L\_\      __   __  _\ \ ,_\     __       ___ \ \ ,_\
+// \ \ \ \ \ /\ '__`\  /'__`\ /' _ `\   \/_\__ \    /'__`\/\ \/'\\ \ \/   /'__`\   /' _ `\\ \ \/
+//  \ \ \_\ \\ \ \L\ \/\  __/ /\ \/\ \    /\ \L\ \ /\  __/\/>  </ \ \ \_ /\ \L\.\_ /\ \/\ \\ \ \_
+//   \ \_____\\ \ ,__/\ \____\\ \_\ \_\   \ `\____\\ \____\/\_/\_\ \ \__\\ \__/.\_\\ \_\ \_\\ \__\
+//    \/_____/ \ \ \/  \/____/ \/_/\/_/    \/_____/ \/____/\//\/_/  \/__/ \/__/\/_/ \/_/\/_/ \/__/
+//            \ \_\
+//             \/_/
+//
+//   OpenSextant XText
+//   Copyright 2012-2021 MITRE
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+//
 package org.opensextant.xtext;
 
 import java.io.File;
@@ -406,7 +405,7 @@ public class PathManager {
         return null;
     }
 
-    public File getArchiveExportDir(File input) throws ConfigException, IOException {
+    public File getArchiveExportDir(File input) throws IOException {
 
         String aName = FilenameUtils.getBaseName(input.getName());
         String aExt = FilenameUtils.getExtension(input.getName());
@@ -606,7 +605,7 @@ public class PathManager {
      * @param filepath path to test
      * @return true if file parent is "/xtext/" or "\xtext\, case sensitive is found anywhere in path.
      */
-    public final static boolean isXTextCache(String filepath) {
+    public  static final boolean isXTextCache(String filepath) {
         if (filepath.contains(DEFAULT_EMBED_FOLDER_IN_PATH)) {
             return true;
         }
@@ -623,7 +622,7 @@ public class PathManager {
      * @param obj path to test.
      * @return  true if file parent is "xtext", case sensitive.
      */
-    public final static boolean isXTextCache(File obj) {
+    public  static final boolean isXTextCache(File obj) {
         return DEFAULT_EMBED_FOLDER.equals(obj.getParentFile().getName());
     }
 

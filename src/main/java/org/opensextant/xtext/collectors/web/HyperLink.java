@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -507,10 +507,10 @@ public class HyperLink {
     /**
      * list of dynamic pages, e.g., items to avoid.
      */
-    private final static Set<String> dynamicPages = new HashSet<String>();
+    private final static Set<String> dynamicPages = new HashSet<>();
 
     /** The Constant resourcePages. */
-    private final static Set<String> resourcePages = new HashSet<String>();
+    private final static Set<String> resourcePages = new HashSet<>();
 
     static {
         dynamicPages.add("asp");
@@ -681,7 +681,7 @@ public class HyperLink {
      * Parses the url.
      */
     protected void parseURL() {
-        /**
+        /*
          * Fails to parse out param around View={xyz} in sharepoint URL
          * List<NameValuePair> params = URLEncodedUtils.parse(new
          * URI(getAbsoluteURL()), "UTF-8"); for (NameValuePair p : params) { if

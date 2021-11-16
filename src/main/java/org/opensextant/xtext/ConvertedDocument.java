@@ -1,19 +1,19 @@
-/*
- *
- * Copyright 2012-2013 The MITRE Corporation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
+/// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+//
+// _____                                ____                     __                       __
+///\  __`\                             /\  _`\                  /\ \__                   /\ \__
+//\ \ \/\ \   _____      __     ___    \ \,\L\_\      __   __  _\ \ ,_\     __       ___ \ \ ,_\
+// \ \ \ \ \ /\ '__`\  /'__`\ /' _ `\   \/_\__ \    /'__`\/\ \/'\\ \ \/   /'__`\   /' _ `\\ \ \/
+//  \ \ \_\ \\ \ \L\ \/\  __/ /\ \/\ \    /\ \L\ \ /\  __/\/>  </ \ \ \_ /\ \L\.\_ /\ \/\ \\ \ \_
+//   \ \_____\\ \ ,__/\ \____\\ \_\ \_\   \ `\____\\ \____\/\_/\_\ \ \__\\ \__/.\_\\ \_\ \_\\ \__\
+//    \/_____/ \ \ \/  \/____/ \/_/\/_/    \/_____/ \/____/\//\/_/  \/__/ \/__/\/_/ \/_/\/_/ \/__/
+//            \ \_\
+//             \/_/
+//
+//   OpenSextant XText
+//   Copyright 2012-2021 MITRE
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+//
 package org.opensextant.xtext;
 
 import java.io.File;
@@ -89,7 +89,7 @@ public final class ConvertedDocument extends DocInput {
     private List<ConvertedDocument> children = null;
     private List<Content> childrenContent = null;
 
-    public static final Set<String> valid_fields = new HashSet<String>(Arrays.asList(fields));
+    public static final Set<String> valid_fields = new HashSet<>(Arrays.asList(fields));
     public String filepath = null;
 
     public String filename = null;
@@ -250,7 +250,6 @@ public final class ConvertedDocument extends DocInput {
         }
         // This is the parent now.
         String parPath = null;
-        parentContainer = null;
         String parName = String.format("%s_%s", basename, extension);
 
         if (saveEmbedded) {
@@ -290,9 +289,9 @@ public final class ConvertedDocument extends DocInput {
      */
     public void addChild(ConvertedDocument ch) {
         if (children == null) {
-            children = new ArrayList<ConvertedDocument>();
+            children = new ArrayList<>();
         }
-        /** You are adding a child item to a parent that is marked as an RFC822 document, so naturally the
+        /* You are adding a child item to a parent that is marked as an RFC822 document, so naturally the
          * child is now an RFC822 attachment.
          */
         if (is_RFC822_attachment) {
@@ -311,7 +310,7 @@ public final class ConvertedDocument extends DocInput {
 
     public void addRawChild(Content child) {
         if (childrenContent == null) {
-            childrenContent = new ArrayList<Content>();
+            childrenContent = new ArrayList<>();
         }
         childrenContent.add(child);
     }
@@ -530,7 +529,10 @@ public final class ConvertedDocument extends DocInput {
         meta.put(k, Long.toString(v));
     }
 
-    /** Default values to -1 if not set */
+    /** Default values to -1 if not set
+     * @param k parameter name
+     * @return long integer value or -1 if non-existing.
+     */
     public long getNumberProperty(String k) {
         String v = meta.getString(k, "-1");
         return Long.parseLong(v);

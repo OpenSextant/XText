@@ -17,13 +17,7 @@
  */
 package org.opensextant.xtext.converters;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import net.htmlparser.jericho.StartTag;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.parser.ParseContext;
@@ -36,7 +30,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ContentHandler;
 
-import net.htmlparser.jericho.StartTag;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A Tika HTML parser that reduces large amounts of empty lines in converted
@@ -55,9 +54,9 @@ public class TikaHTMLConverter extends ConverterAdapter {
     /**
      * Initially useuful metadata is just date and times pushed through meta tags or meta-equiv tags
      * Override as needed.
-     * 
+     *
      * @param m metadata key
-     * @return if field is generally useful. 
+     * @return if field is generally useful.
      */
     public static boolean isUsefulMeta(String m) {
         String tag = m.toLowerCase();
@@ -68,8 +67,8 @@ public class TikaHTMLConverter extends ConverterAdapter {
         if (tag.startsWith("twitter:") || tag.startsWith("fb:")) {
             return false;
         }
-        /* Other generic metadata worth tracking: 
-         * 
+        /* Other generic metadata worth tracking:
+         *
          */
         if (tag.contains("description") || tag.contains("subject") || tag.contains("keywords")) {
             return true;
@@ -85,11 +84,9 @@ public class TikaHTMLConverter extends ConverterAdapter {
 
     /**
      * Initialize a reusable HTML parser.
-     * 
-     * @param article_only
-     *            true if you want to scrub HTML
-     * @throws IOException
-     *             on err
+     *
+     * @param article_only true if you want to scrub HTML
+     * @throws IOException on err
      */
     public TikaHTMLConverter(boolean article_only) throws IOException {
         scrubHTMLArticle = article_only;
@@ -97,13 +94,10 @@ public class TikaHTMLConverter extends ConverterAdapter {
 
     /**
      * Initialize a reusable HTML parser.
-     * 
-     * @param article_only
-     *            true if you want to scrub HTML
-     * @param docSize
-     *            a maximum raw HTML document size
-     * @throws IOException
-     *             on err
+     *
+     * @param article_only true if you want to scrub HTML
+     * @param docSize      a maximum raw HTML document size
+     * @throws IOException on err
      */
     public TikaHTMLConverter(boolean article_only, int docSize) throws IOException {
         this(article_only);
@@ -151,7 +145,8 @@ public class TikaHTMLConverter extends ConverterAdapter {
         textdoc.addTitle(metadata.get(TikaCoreProperties.TITLE));
 
         String text = null;
-        if (scrubHTMLArticle) {
+        // Decide if HTML text should be returned scrubbed or raw
+        if (scrubHTMLArticle && scrubbingHandler != null && scrubbingHandler.getTextDocument() != null) {
             text = scrubbingHandler.getTextDocument().getText(true, false);
         } else {
             text = handler.toString();
@@ -159,7 +154,7 @@ public class TikaHTMLConverter extends ConverterAdapter {
 
         textdoc.setText(TextUtils.reduce_line_breaks(text));
 
-        // -- Improve CHAR SET encoding answer.
+        // Improve CHAR SET encoding answer.
         byte[] data = textdoc.buffer.getBytes();
         if (TextUtils.isASCII(data)) {
             textdoc.setEncoding("ASCII");
@@ -186,13 +181,13 @@ public class TikaHTMLConverter extends ConverterAdapter {
     /**
      * Heuristics for pulling in metadata that Tika neglects for various reasons.
      * This adds found meta tags to given metadata.
-     * 
+     * <p>
      * TODO: InputStream is difficult to reset after tika parser reads it. So just using the file object,
      * Jericho reads the raw file again.
-     * 
+     *
      * @param doc file object for document
-     * @param metadata metadata map to backfill
-     * @throws IOException
+     * @param md  metadata map to backfill
+     * @throws IOException from Jericho HTML API if HTML parsing fails
      */
     private void parseHTMLMetadata(File doc, Map<String, String> md) throws IOException {
         net.htmlparser.jericho.Source htmlDoc = new net.htmlparser.jericho.Source(doc);
@@ -202,7 +197,7 @@ public class TikaHTMLConverter extends ConverterAdapter {
             String p = t.getAttributeValue("property");
 
             if (p == null && n == null) {
-                log.debug("Unmatched metadata in HTML {}", t.toString());
+                log.debug("Unmatched metadata in HTML {}", t);
                 continue;
             }
             String key = p != null ? p : n;

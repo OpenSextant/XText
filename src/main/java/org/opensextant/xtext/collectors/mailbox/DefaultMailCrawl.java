@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -191,7 +191,7 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
      * @throws IOException on failure to connect or collect.
      */
     @Override
-    public void collect() throws IOException, ConfigException {
+    public void collect() throws IOException {
 
         Date d = new Date();
         File dateFolder = createDateFolder(d);
@@ -236,7 +236,7 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
                     break;
                 }
 
-                /**
+                /*
                  * Silently ignore deleted messages; items deleted while we were
                  * in session
                  */

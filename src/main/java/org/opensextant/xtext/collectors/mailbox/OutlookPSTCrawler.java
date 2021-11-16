@@ -1,6 +1,6 @@
-/**
+/*
  *
- *      Copyright 2009-2013 The MITRE Corporation.
+ *      Copyright 2018 MITRE.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,7 @@
  */
 package org.opensextant.xtext.collectors.mailbox;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
+import com.pff.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.format.DateTimeFormat;
@@ -39,25 +32,22 @@ import org.opensextant.xtext.converters.MessageConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pff.PSTAppointment;
-import com.pff.PSTAttachment;
-import com.pff.PSTContact;
-import com.pff.PSTDistList;
-import com.pff.PSTException;
-import com.pff.PSTFile;
-import com.pff.PSTFolder;
-import com.pff.PSTMessage;
-import com.pff.PSTObject;
-import com.pff.PSTRecipient;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * OutlookPSTCrawler traverses a PST file and pulls out: E-Mail files + attachments, Contacts, Appointments, etc.
  * saving originals in a reasonable folder structure.
- *
- *  Mail in particular will be foldered by date-line, then short subject name folder.
- *
- *  Given SomeFile.PST, the resultant output folder created will look like the example below.
- *  <pre>
+ * <p>
+ * Mail in particular will be foldered by date-line, then short subject name folder.
+ * <p>
+ * Given SomeFile.PST, the resultant output folder created will look like the example below.
+ * <pre>
  *    SomeFile_PST/
  *      + Contacts
  *      + Appointments
@@ -67,28 +57,27 @@ import com.pff.PSTRecipient;
  *             +-- RE__Shipping_Invoice.eml
  *             +-- Invoice.PDF
  *  </pre>
+ * <p>
+ * Supposedly on April 5th, 2014, an email was received (Mail-Inbox); titled "RE: Shipping Invoice".
+ * To make the archival of such content obvious, the subject line is converted to a safe folder/filename.
+ * <p>
+ * Usage:
  *
- *  Supposedly on April 5th, 2014, an email was received (Mail-Inbox); titled "RE: Shipping Invoice".
- *  To make the archival of such content obvious, the subject line is converted to a safe folder/filename.
+ * <code>
+ * crawler = OutlookPSTCrawler( path )
+ * //crawer...  set modes, set listener, converter, etc.
+ * crawler.configure()
+ * crawler.collect()
  *
- *  Usage:
+ * </code>
  *
- *  <code>
- *   crawler = OutlookPSTCrawler( path )
- *   //crawer...  set modes, set listener, converter, etc.
- *   crawler.configure()
- *   crawler.collect()
- *
- *   </code>
  * @author ubaldino
- *
  */
 public class OutlookPSTCrawler implements Collector {
 
     /**
      * A collection listener to consult as far as how to record the found &amp; converted content
      * as well as to determine what is worth saving.
-     *
      */
     protected CollectionListener listener = null;
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -109,8 +98,7 @@ public class OutlookPSTCrawler implements Collector {
     public boolean overwriteMode = false;
 
     /**
-     *
-     * @param pstFilepath  input PST
+     * @param pstFilepath input PST
      * @throws IOException if file fails to load
      */
 
@@ -119,8 +107,7 @@ public class OutlookPSTCrawler implements Collector {
     }
 
     /**
-     *
-     * @param pstFile  input PST
+     * @param pstFile input PST
      * @throws IOException if file fails to load
      */
     public OutlookPSTCrawler(File pstFile) throws IOException {
@@ -134,6 +121,7 @@ public class OutlookPSTCrawler implements Collector {
     /**
      * Beware -- you can set the path for the PST output (outputPSTDir) or you can set the path its parent path (outputDir).
      * Outside apps may want to control the path setup.   To use the default,  setOutputDir(); configure();
+     *
      * @throws ConfigException if output folder could not be set
      */
     public void configure() throws ConfigException {
@@ -178,7 +166,7 @@ public class OutlookPSTCrawler implements Collector {
     }
 
     @Override
-    public void collect() throws IOException, ConfigException {
+    public void collect() throws IOException {
         //
         // Logic:  Traverse PST file.
         //     it contains mail, contacts, tasks, notes, other stuff?
@@ -211,10 +199,10 @@ public class OutlookPSTCrawler implements Collector {
      * If a converter is provided, it will be used to convert attachments.
      * PST API does not provide access to full email stream, so most objects - tasks, mail, contacts, etc.
      * are retrieved as text already.
-     *
+     * <p>
      * Caller is responsible for mananging the XText caching options.
      *
-     * @param conversionManager  XText instance
+     * @param conversionManager XText instance
      */
     public void setConverter(XText conversionManager) {
         converter = conversionManager;
@@ -224,14 +212,13 @@ public class OutlookPSTCrawler implements Collector {
     private final int maxDepth = 10;
 
     /**
-     *
-     * @param folder  found folder from PST
-     * @throws PSTException PST API error
-     * @throws IOException I/O failure
-     * @throws ConfigException  XText configuration error
+     * @param folder found folder from PST
+     * @throws PSTException    PST API error
+     * @throws IOException     I/O failure
+     * @throws ConfigException XText configuration error
      */
     protected void processFolder(PSTFolder folder) throws PSTException, IOException,
-    ConfigException {
+            ConfigException {
         log.info("Folder:" + folder.getDisplayName());
         ++depth;
         if (depth >= maxDepth) {
@@ -280,9 +267,8 @@ public class OutlookPSTCrawler implements Collector {
     }
 
     /**
-     *
-     * @param grp  A major group of Outlook objects
-     * @param sub  a subgroup
+     * @param grp A major group of Outlook objects
+     * @param sub a subgroup
      * @return resulting grouping string that represents an output subfolder
      * @throws IOException on I/O failure
      */
@@ -304,13 +290,12 @@ public class OutlookPSTCrawler implements Collector {
     }
 
     /**
-     *
      * @param groupName  group name
-     * @param folderName  folder name
-     * @param appt   PST API object
+     * @param folderName folder name
+     * @param appt       PST API object
      * @return file name of processed object
-     * @throws IOException err
-     * @throws PSTException err
+     * @throws IOException     err
+     * @throws PSTException    err
      * @throws ConfigException err
      */
     public String processAppointment(String groupName, String folderName, PSTAppointment appt)
@@ -346,17 +331,16 @@ public class OutlookPSTCrawler implements Collector {
     }
 
     /**
-     *
-     * @param appt  PST API object
+     * @param appt PST API object
      * @return list of recipients
      * @throws PSTException err
-     * @throws IOException err
+     * @throws IOException  err
      */
     public List<String> getRecipients(PSTAppointment appt) throws PSTException, IOException {
 
         int recipients = appt.getNumberOfRecipients();
         if (recipients > 0) {
-            List<String> rList = new ArrayList<String>();
+            List<String> rList = new ArrayList<>();
             for (int r = 0; r < recipients; ++r) {
                 PSTRecipient R = appt.getRecipient(r);
                 rList.add(String.format("%s <%s>", R.getDisplayName(), R.getEmailAddress()));
@@ -374,12 +358,15 @@ public class OutlookPSTCrawler implements Collector {
      *
      * @param groupName  string
      * @param folderName string
-     * @param contact   PST API object
+     * @param contact    PST API object
      * @return saved path
      * @throws IOException on err
      */
     public String processContact(String groupName, String folderName, PSTContact contact)
             throws IOException {
+        if (contact == null) {
+            return null;
+        }
         File contacts = createGroupFolder(groupName, folderName);
         String fname = MessageConverter.createSafeFilename(contact.getDisplayName());
 
@@ -399,10 +386,9 @@ public class OutlookPSTCrawler implements Collector {
      *
      * @param groupName  string
      * @param folderName string
-     * @param list  PST API list
+     * @param list       PST API list
      * @return saved path
-     *
-     * @throws IOException on err
+     * @throws IOException  on err
      * @throws PSTException on err
      */
     public String processDistList(String groupName, String folderName, PSTDistList list)
@@ -414,14 +400,16 @@ public class OutlookPSTCrawler implements Collector {
         buf.append(list.getDisplayName());
         buf.append(" distribution list");
         buf.append(ITEM_SEP);
-        buf.append("Address:\t" + list.getEmailAddress() + "\n");
-        buf.append("Comment:\t" + list.getComment() + "\n");
+        buf.append(String.format("Address:\t%s\n", list.getEmailAddress()));
+        buf.append(String.format("Comment:\t%s\n", list.getComment()));
         buf.append("\n");
 
         Object[] members = list.getDistributionListMembers();
         for (Object member : members) {
-            formatFields(parseValidEntries(member.toString()), buf);
-            buf.append("\n\t-------\n");
+            if (member != null) {
+                formatFields(parseValidEntries(member.toString()), buf);
+                buf.append("\n\t-------\n");
+            }
         }
 
         String savedPath = makePath(contacts, fname + ".txt");
@@ -456,7 +444,7 @@ public class OutlookPSTCrawler implements Collector {
             return null;
         }
 
-        List<OutlookPSTCrawler.Field> result = new ArrayList<OutlookPSTCrawler.Field>();
+        List<OutlookPSTCrawler.Field> result = new ArrayList<>();
         String[] kvPairs = pff_string.split("\n");
         for (String kv : kvPairs) {
 
@@ -477,7 +465,8 @@ public class OutlookPSTCrawler implements Collector {
      * Apache Commons file utils "concat(dir, file)" makes a mess of file names.
      * Java can support "/" equally well on all platforms.
      * there is no apparent need to use platform specific file separators in this context.
-     * @param dir  contianing dir
+     *
+     * @param dir   contianing dir
      * @param fname sub folder
      * @return full path.
      */
@@ -485,8 +474,7 @@ public class OutlookPSTCrawler implements Collector {
         return String.format("%s/%s", dir.getAbsolutePath(), fname);
     }
 
-    public void processMessage(String folderName, PSTMessage msg) throws PSTException, IOException,
-    ConfigException {
+    public void processMessage(String folderName, PSTMessage msg) throws PSTException, IOException {
 
         String dateKey = FOLDER_DATE.print(msg.getCreationTime().getTime());
         log.info("\tItem: {}; created at {}", msg.getSubject(), dateKey);
@@ -523,10 +511,10 @@ public class OutlookPSTCrawler implements Collector {
     /**
      * Archive a PST Mail Message as a Text file.
      *
-     * @param msg PST API message
+     * @param msg       PST API message
      * @param msgFolder output folder
-     * @param attFiles attachments
-     * @param subj subject
+     * @param attFiles  attachments
+     * @param subj      subject
      * @return final saved path
      * @throws IOException err saving message
      */
@@ -582,7 +570,7 @@ public class OutlookPSTCrawler implements Collector {
         buf.append(field);
         buf.append(":\t");
         if (value != null) {
-            buf.append(value.toString());
+            buf.append(value);
         } else {
             buf.append("(empty)");
         }
@@ -597,15 +585,15 @@ public class OutlookPSTCrawler implements Collector {
     /**
      * An arbitrary method of finding a unique path for a MIME message, without opening up content on disk.
      * This creates the folder if needed.
-     *
+     * <p>
      * TODO:  given we want the folder structure to be intuitive and readable, the file names may not reflect uniqueness
      * where subject lines for email may be repetitive.  By contrast, message IDs are not duplicative.  The length of file names
      * from using both message ID and subject line is an issue.  This routine attempts to get a relatively unique path using both.
      *
-     * @param container  output container relative path
-     * @param msgSubj message subject
-     * @param msgId message ID
-     * @return  absolute path to file that will contain all related info for a given message.
+     * @param container output container relative path
+     * @param msgSubj   message subject
+     * @param msgId     message ID
+     * @return absolute path to file that will contain all related info for a given message.
      * @throws IOException err
      */
     protected File createFolder(File container, String msgSubj, String msgId) throws IOException {
@@ -640,20 +628,21 @@ public class OutlookPSTCrawler implements Collector {
 
     /**
      * REFERENCE:  libpst home page, https://code.google.com/p/java-libpst/
-     * @author com.pff
-     * @author ubaldino -- cleaned up name checks.
-     * @param msg  PST API message
+     *
+     * @param msg       PST API message
      * @param msgFolder output target
      * @return list of attachment filenames
-     * @throws PSTException err
-     * @throws IOException err
+     * @throws PSTException    err
+     * @throws IOException     err
      * @throws ConfigException err
+     * @author com.pff
+     * @author ubaldino -- cleaned up name checks.
      */
     public List<String> processAttachments(PSTMessage msg, File msgFolder) throws PSTException,
-    IOException, ConfigException {
+            IOException, ConfigException {
 
         int numberOfAttachments = msg.getNumberOfAttachments();
-        List<String> attachmentFilenames = new ArrayList<String>();
+        List<String> attachmentFilenames = new ArrayList<>();
         for (int x = 0; x < numberOfAttachments; x++) {
             PSTAttachment attach = msg.getAttachment(x);
             // both long and short filenames can be used for attachments
@@ -687,7 +676,7 @@ public class OutlookPSTCrawler implements Collector {
     /**
      * Guidance on I/O from PFF library authors, regarding getting data from PST format.
      *
-     * @param stream  input
+     * @param stream   input
      * @param savePath ouput
      * @throws IOException err
      */
@@ -715,6 +704,7 @@ public class OutlookPSTCrawler implements Collector {
 
     /**
      * Set the parent container of PST output.
+     *
      * @param outputDir path to output
      */
     public void setOutputDir(File outputDir) {
@@ -723,6 +713,7 @@ public class OutlookPSTCrawler implements Collector {
 
     /**
      * set the location of the output.
+     *
      * @param pstDir path of PST output
      */
     public void setOutputPSTDir(File pstDir) {
@@ -731,7 +722,6 @@ public class OutlookPSTCrawler implements Collector {
 
     /**
      * Map string buffer output to fielded items, by parsing line items.
-     *
      */
     static class Field {
         public String label = null;

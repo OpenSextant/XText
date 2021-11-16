@@ -44,7 +44,7 @@ public class EmbeddedContentConverter extends DefaultConverter {
     ParseContext context = new ParseContext();
     Logger log = LoggerFactory.getLogger(getClass());
 
-    private final static Set<String> supportedTypes = new HashSet<String>();
+    private final static Set<String> supportedTypes = new HashSet<>();
 
     static {
         supportedTypes.add("pptx");
@@ -159,7 +159,7 @@ public class EmbeddedContentConverter extends DefaultConverter {
         return buf.toString();
     }
 
-    private final static Set<String> filterableMeta = new HashSet<String>();
+    private final static Set<String> filterableMeta = new HashSet<>();
     static {
         filterableMeta.add("application/x-emf");
         filterableMeta.add("application/x-msmetafile");

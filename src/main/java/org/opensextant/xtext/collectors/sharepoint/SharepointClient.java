@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -129,7 +129,7 @@ public class SharepointClient extends WebClient {
      * @return list of found sharepoint links
      */
     public Collection<SPLink> parseContentPage(String html, URL pageUrl) {
-        Map<String, SPLink> contentLinks = new HashMap<String, SPLink>();
+        Map<String, SPLink> contentLinks = new HashMap<>();
         Pattern href_matcher = Pattern.compile("href=\"([^\"]+)\"");
         Matcher matches = href_matcher.matcher(html);
         while (matches.find()) {

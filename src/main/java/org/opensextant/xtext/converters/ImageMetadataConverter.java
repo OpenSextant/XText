@@ -60,7 +60,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
 
     public final static String[] usefulFields = { "geo", "gps", "creation", "date", "model" };
 
-    private final static Set<String> usefulFieldsSet = new HashSet<String>();
+    private final static Set<String> usefulFieldsSet = new HashSet<>();
     static {
         usefulFieldsSet.addAll(Arrays.asList(usefulFields));
     }

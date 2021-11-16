@@ -20,10 +20,7 @@ package org.opensextant.xtext.converters;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +34,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 //import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import javax.mail.internet.MimeUtility;
-
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +42,7 @@ import org.opensextant.util.FileUtility;
 import org.opensextant.util.TextUtils;
 import org.opensextant.xtext.Content;
 import org.opensextant.xtext.ConvertedDocument;
+import org.opensextant.xtext.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +69,9 @@ import org.slf4j.LoggerFactory;
  *
  *  ... 1 file becomes 5 additional files, in this example.
  *
+ * HTML content:  Note, HTML inline MIME media or HTML attachments are not distinguished.  ALL of the HTML is
+ * appended to the message body.  So attachment count here may not line up with what is seen in an email viewer.
+ *
  * Ho hum...
  *  https://issues.apache.org/jira/browse/TIKA-1222 -- Attachments are not parsed.
  */
@@ -81,7 +82,8 @@ public class MessageConverter extends ConverterAdapter {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     private final Session noSession = Session.getDefaultInstance(new Properties());
     private int attachmentNumber = 0;
-    private final List<String> textEncodings = new LinkedList<String>();
+    private final List<String> textEncodings = new LinkedList<>();
+    private Converter payloadConverter = null;
 
     /**
      * @param in  stream
@@ -94,6 +96,9 @@ public class MessageConverter extends ConverterAdapter {
 
         attachmentNumber = 0;
         textEncodings.clear();
+        if (payloadConverter == null) {
+            payloadConverter = new TikaHTMLConverter(false);
+        }
         try {
             // Connect to the message file
             //
@@ -137,6 +142,7 @@ public class MessageConverter extends ConverterAdapter {
         parseMessage(msg, parentMsgDoc, rawText, messageFilePrefix);
 
         parentMsgDoc.setText(rawText.toString());
+        parentMsgDoc.is_converted = true;
 
         return parentMsgDoc;
     }
@@ -308,7 +314,20 @@ public class MessageConverter extends ConverterAdapter {
 
             if (meta.isHTML()) {
                 //
-                logger.debug("{}# Save HTML part as its own file", msgPrefixId);
+                // logger.debug("{}# Save HTML part as its own file", msgPrefixId);
+                Content child = createBaseChildContent(filename, meta);
+                if (child.encoding == null) {
+                    child.encoding = "UTF-8";
+                }
+                Object html = bodyPart.getContent();
+                ConvertedDocument payload = payloadConverter.convert(html.toString());
+                if (!isBlank(buf)) {
+                    buf.append("\n===============\n");
+                }
+                buf.append(payload.getText());
+
+                // Exit point
+                return;
 
             } else if (bodyPart.isMimeType("multipart/*")) {
                 Multipart mp = (Multipart) bodyPart.getContent();
@@ -424,7 +443,6 @@ public class MessageConverter extends ConverterAdapter {
                     }
 
                     parent.addRawChild(child);
-                    return;
                 }
             }
 
@@ -534,7 +552,7 @@ public class MessageConverter extends ConverterAdapter {
      *
      * @author ubaldino
      */
-    class PartMetadata {
+    static class PartMetadata {
 
         public String mimeType = null;
         public String charset = null;
@@ -605,7 +623,7 @@ public class MessageConverter extends ConverterAdapter {
 
             String[] contentIds = bodyPart.getHeader("Content-Id");
             if (contentIds != null && contentIds.length > 0
-                    && (!StringUtils.isBlank(contentIds[0]))) {
+                    && (!isBlank(contentIds[0]))) {
                 contentId = extractAngleValue(contentIds[0]);
             }
         }
@@ -717,7 +735,7 @@ public class MessageConverter extends ConverterAdapter {
      */
     public static String createSafeFilename(String text) {
         String tmp = TextUtils.squeeze_whitespace(text).replaceAll(
-                "[\"'&;.“”)(%$?:<>\\*#~!@\\\\/ ]", "_");
+                "[\"'&;.“”)(%$?:<>*#~!@\\/ ]", "_");
 
         // Trim trailing "__" from resulting file name.
         for (int x = tmp.length() - 1; x > 0; --x) {

@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright 2013-2014 OpenSextant.org
+ * Copyright 2013-2014 MITRE
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -127,10 +127,6 @@ CrawlFilter {
         if (filterOutFile(link.getAbsoluteURL())) {
             return true;
         }
-        //        if (link.isPageAnchor()) {
-        //            log.debug("Filter out anchor link {}", link);
-        //            return true;
-        //        }
         return false;
     }
 
@@ -248,7 +244,7 @@ CrawlFilter {
             return;
         }
 
-        /**
+        /*
          *  Convert the item.
          */
         ConvertedDocument doc = null;
