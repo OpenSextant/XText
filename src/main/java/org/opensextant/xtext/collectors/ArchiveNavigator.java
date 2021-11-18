@@ -17,16 +17,6 @@
  */
 package org.opensextant.xtext.collectors;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.zip.GZIPInputStream;
-
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -41,6 +31,9 @@ import org.opensextant.xtext.Converter;
 import org.opensextant.xtext.ExclusionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Archive is traversed, but no data is written to disk unless XText is in save
@@ -61,13 +54,13 @@ public class ArchiveNavigator implements Collector {
      * It must exist ahead of time;
      *
      * @param inputFile  input archive
-     * @param saveTo output dir where entries are saved.
-     * @param fileFilter  file exension filter
-     * @param fileConv  conversion resource, e.g. instance of XText
+     * @param saveTo     output dir where entries are saved.
+     * @param fileFilter file exension filter
+     * @param fileConv   conversion resource, e.g. instance of XText
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public ArchiveNavigator(File inputFile, String saveTo, ExclusionFilter fileFilter,
-            Converter fileConv) throws IOException {
+                            Converter fileConv) throws IOException {
         this.saveDir = new File(saveTo);
         filter = fileFilter;
         converter = fileConv;
@@ -89,8 +82,9 @@ public class ArchiveNavigator implements Collector {
     /**
      * Unpack any archive. You must provide a converter -- which converts each
      * file.
+     *
      * @throws ConfigException if archive output dirs were requested but unsettable or non-existant
-     * @throws IOException if archive had I/O issues or is invalid type of archive
+     * @throws IOException     if archive had I/O issues or is invalid type of archive
      */
     @Override
     public void collect() throws IOException, ConfigException {
@@ -125,14 +119,10 @@ public class ArchiveNavigator implements Collector {
      */
     public File unzip(File zipFile) throws IOException {
 
-        File workingDir = saveDir;
-
-        InputStream input = new BufferedInputStream(new FileInputStream(zipFile));
-        ZipArchiveInputStream in = null;
-        try {
-            in = (ZipArchiveInputStream) (new ArchiveStreamFactory().createArchiveInputStream(
-                    "zip", input));
-
+        try (InputStream input = new BufferedInputStream(new FileInputStream(zipFile));
+             ZipArchiveInputStream in = (ZipArchiveInputStream) (new ArchiveStreamFactory().createArchiveInputStream(
+                     "zip", input))) {
+            File workingDir = saveDir;
             ZipArchiveEntry zipEntry;
             while ((zipEntry = (ZipArchiveEntry) in.getNextEntry()) != null) {
                 if (filterEntry(zipEntry)) {
@@ -153,42 +143,30 @@ public class ArchiveNavigator implements Collector {
 
         } catch (ArchiveException ae) {
             throw new IOException(ae);
-        } finally {
-            in.close();
         }
     }
 
     /**
-     *
      * @param theFile archive file
-     * @param fname filename
+     * @param fname   filename
      * @return TAR file path for result.
      * @throws IOException on I/O failure
      */
     private File gunzipAsTAR(File theFile, String fname) throws IOException {
 
-        GZIPInputStream gzipInputStream = null;
-        OutputStream out = null;
+        // TODO:  more testing on this particular case:  gunzip *.gz *.tgz *.tar.gz -- a mix of tar and gunzip
+        String outFilename = getWorkingDir() + '/' + fname + ".tar";
+        File outFile = new File(outFilename);
 
-        try {
-            gzipInputStream = new GZIPInputStream(new FileInputStream(theFile));
-            // TODO:  more testing on this particular case:  gunzip *.gz *.tgz *.tar.gz -- a mix of tar and gunzip
-            String outFilename = getWorkingDir() + '/' + fname + ".tar";
-            File outFile = new File(outFilename);
-            out = new BufferedOutputStream(new FileOutputStream(outFilename));
-
+        try (GZIPInputStream gzipInputStream = new GZIPInputStream(new FileInputStream(theFile));
+             OutputStream out = new BufferedOutputStream(new FileOutputStream(outFilename))
+        ) {
             byte[] buf = new byte[1024];
             int len;
             while ((len = gzipInputStream.read(buf)) > 0) {
                 out.write(buf, 0, len);
             }
-
             return outFile;
-        } finally {
-            gzipInputStream.close();
-            if (out != null) {
-                out.close();
-            }
         }
     }
 
@@ -207,12 +185,10 @@ public class ArchiveNavigator implements Collector {
         File workingDir = new File(_working);
         workingDir.mkdir();
 
-        InputStream input = new BufferedInputStream(new FileInputStream(tarFile));
-        TarArchiveInputStream in = null;
-        try {
-            in = (TarArchiveInputStream) (new ArchiveStreamFactory().createArchiveInputStream(
-                    "tar", input));
-
+        try (InputStream input = new BufferedInputStream(new FileInputStream(tarFile));
+             TarArchiveInputStream in = (TarArchiveInputStream) (new ArchiveStreamFactory().createArchiveInputStream(
+                     "tar", input))
+        ) {
             TarArchiveEntry tarEntry;
             while ((tarEntry = (TarArchiveEntry) in.getNextEntry()) != null) {
                 if (filterEntry(tarEntry)) {
@@ -230,8 +206,6 @@ public class ArchiveNavigator implements Collector {
             }
         } catch (ArchiveException ae) {
             throw new IOException(ae);
-        } finally {
-            in.close();
         }
         return workingDir;
     }
@@ -239,9 +213,9 @@ public class ArchiveNavigator implements Collector {
     /**
      * save to root dir
      *
-     * @param e archive entry
+     * @param e         archive entry
      * @param archiveio inputstream
-     * @param root root folder
+     * @param root      root folder
      * @return output folder where archive was expanded/converted
      * @throws IOException if entry could not be saved to disk, e.g., outputDir
      */
@@ -251,6 +225,7 @@ public class ArchiveNavigator implements Collector {
     }
 
     /**
+     *
      */
     private File saveArchiveEntry(ArchiveEntry E, InputStream archiveio, String root)
             throws IOException {
@@ -269,12 +244,8 @@ public class ArchiveNavigator implements Collector {
 
         target.getParentFile().mkdirs();
         log.debug("ARCHIVE_ENTRY={}", E.getName());
-        OutputStream output = null;
-        try {
-            output = new FileOutputStream(target);
+        try (OutputStream output = new FileOutputStream(target)) {
             IOUtils.copy(archiveio, output);
-        } finally {
-            output.close();
         }
         return target;
     }
@@ -283,10 +254,7 @@ public class ArchiveNavigator implements Collector {
         if (E.isDirectory()) {
             return true;
         }
-        if (filter.filterOutFile(E.getName())) {
-            return true;
-        }
-        return false;
+        return filter.filterOutFile(E.getName());
     }
 
     @Override

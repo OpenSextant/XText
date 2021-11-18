@@ -350,7 +350,7 @@ public class OutlookPSTCrawler implements Collector {
         return null;
     }
 
-    private static String ITEM_SEP = "\n=====================\n";
+    private static final String ITEM_SEP = "\n=====================\n";
 
     /**
      * Save contact to a file.  This uses the less elegant "toString()" method, which prints to buffer all fields
@@ -681,21 +681,21 @@ public class OutlookPSTCrawler implements Collector {
      * @throws IOException err
      */
     private static void savePSTFile(InputStream stream, String savePath) throws IOException {
-
-        FileOutputStream out = new FileOutputStream(savePath);
-        //InputStream attachmentStream = attach.getFileInputStream();
-        // 8176 is the block size used internally and should give the best performance
-        byte[] buffer = new byte[PST_INTERNAL_BLOCK_SIZE];
-        int count = stream.read(buffer);
-        while (count == PST_INTERNAL_BLOCK_SIZE) {
-            out.write(buffer);
-            count = stream.read(buffer);
+        try (FileOutputStream out = new FileOutputStream(savePath)) {
+            //InputStream attachmentStream = attach.getFileInputStream();
+            // 8176 is the block size used internally and should give the best performance
+            byte[] buffer = new byte[PST_INTERNAL_BLOCK_SIZE];
+            int count = stream.read(buffer);
+            while (count == PST_INTERNAL_BLOCK_SIZE) {
+                out.write(buffer);
+                count = stream.read(buffer);
+            }
+            byte[] endBuffer = new byte[count];
+            System.arraycopy(buffer, 0, endBuffer, 0, count);
+            out.write(endBuffer);
+        } finally {
+            stream.close();
         }
-        byte[] endBuffer = new byte[count];
-        System.arraycopy(buffer, 0, endBuffer, 0, count);
-        out.write(endBuffer);
-        out.close();
-        stream.close();
     }
 
     public File getOutputDir() {
