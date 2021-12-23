@@ -683,8 +683,7 @@ public final class XText implements ExclusionFilter, Converter {
                     // saved in ./xtext/ folder or in the separate archive.
                     // But this must be down now, as we have all the dynamic
                     // metadata + raw artifacts; As it is all written out to
-                    // disk,
-                    // it will be written out together.
+                    // disk, it will be written out together.
                     //
                     if (textDoc.hasRawChildren()) {
                         convertChildren(textDoc);
