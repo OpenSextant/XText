@@ -100,9 +100,7 @@ public class EmbeddedContentConverter extends DefaultConverter {
         ParserContainerExtractor extractor = new ParserContainerExtractor();
         EmbeddedObjectExtractor objExtractor = new EmbeddedObjectExtractor(compoundDoc, true);
 
-        TikaInputStream tikaStream = null;
-        try {
-            tikaStream = TikaInputStream.get(doc.toPath());
+        try (TikaInputStream tikaStream = TikaInputStream.get(doc.toPath())) {
             extractor.extract(tikaStream, extractor, objExtractor);
             compoundDoc.is_converted = true;
             if (compoundDoc.hasRawChildren()) {
@@ -125,8 +123,6 @@ public class EmbeddedContentConverter extends DefaultConverter {
             }
         } catch (Exception e) {
             throw new IOException("Stream parsing problem", e);
-        } finally {
-            tikaStream.close();
         }
     }
 
@@ -142,20 +138,15 @@ public class EmbeddedContentConverter extends DefaultConverter {
         for (Content c : childObjects) {
 
             buf.append(String.format("%n[Embedded: %s; %s]%n", c.id, c.tikaMediatype.toString()));
-            try {
-                // NOTE: To do this well, you may have to write bytes to disk as a valid file name
-                //  And let Tika convert in full.
-
-                ConvertedDocument text = conv.conversionImplementation(
-                        TikaInputStream.get(c.content, c.tikaMetadata), null);
+            try (InputStream istream = TikaInputStream.get(c.content, c.tikaMetadata)){
+                ConvertedDocument text = conv.conversionImplementation(istream, null);
                 buf.append(text.getText());
             } catch (IOException ioe) {
+                // Each individual item in the list of children may fail. They have their own identity.
                 buf.append("Unconvertable content");
             }
-
             buf.append("\n");
         }
-
         return buf.toString();
     }
 

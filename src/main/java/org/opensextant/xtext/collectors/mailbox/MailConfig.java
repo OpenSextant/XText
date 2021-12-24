@@ -87,12 +87,10 @@ public class MailConfig extends Properties {
     public MailConfig(String propsFilePath) throws IOException, ConfigException {
         super(System.getProperties());
 
-        InputStream fileInputStream = null;
-        fileInputStream = new FileInputStream(propsFilePath);
-
-        this.load(fileInputStream);
-        fileInputStream.close();
-        setProperties();
+        try(InputStream fileInputStream  = new FileInputStream(propsFilePath)) {
+            this.load(fileInputStream);
+            setProperties();
+        }
     }
 
     public MailConfig(URL cfgUrl) throws IOException {
@@ -101,11 +99,10 @@ public class MailConfig extends Properties {
             throw new ConfigException("Mail Configuration not found");
         }
 
-        InputStream io = cfgUrl.openStream();
-        this.load(io);
-        io.close();
-
-        setProperties();
+        try (InputStream io = cfgUrl.openStream()) {
+            this.load(io);
+            setProperties();
+        }
     }
 
     /**

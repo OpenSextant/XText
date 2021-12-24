@@ -36,7 +36,6 @@ import org.apache.tika.mime.MimeTypes;
 import org.opensextant.util.FileUtility;
 import org.opensextant.util.TextUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * A representation of a harvested hyperlink. Normalization of found URL attempts to derive:
  * <ul>
@@ -596,7 +595,7 @@ public class HyperLink {
             return true;
         }
         final String desc = FileUtility.getFileDescription(urlValue);
-        if (desc == FileUtility.WEBPAGE_MIMETYPE) {
+        if (FileUtility.WEBPAGE_MIMETYPE.equals(desc)) {
             return true;
         }
         // Test case: http://a.b.com/my/page

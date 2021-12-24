@@ -129,15 +129,11 @@ public class TikaHTMLConverter extends ConverterAdapter {
 
         try {
             parser.parse(input, (scrubHTMLArticle ? scrubbingHandler : handler), metadata, new ParseContext());
-
             if (doc != null) {
                 parseHTMLMetadata(doc, moreMetadata);
             }
-
         } catch (Exception xerr) {
             throw new IOException("Unable to parse content", xerr);
-        } finally {
-            input.close();
         }
 
         ConvertedDocument textdoc = new ConvertedDocument(doc);
@@ -211,6 +207,5 @@ public class TikaHTMLConverter extends ConverterAdapter {
             }
             md.put(key, v);
         }
-
     }
 }

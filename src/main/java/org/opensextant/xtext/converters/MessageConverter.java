@@ -17,24 +17,6 @@
  */
 package org.opensextant.xtext.converters;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.Session;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-//import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
-import javax.mail.internet.MimeUtility;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +27,22 @@ import org.opensextant.xtext.ConvertedDocument;
 import org.opensextant.xtext.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.mail.*;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /*
  * This Mail Message parser/converter should do its work on *.msg or *.eml files saved to disk as standard RFC822
@@ -93,7 +91,6 @@ public class MessageConverter extends ConverterAdapter {
     @Override
     protected ConvertedDocument conversionImplementation(InputStream in, File doc)
             throws IOException {
-
         attachmentNumber = 0;
         textEncodings.clear();
         if (payloadConverter == null) {
@@ -106,8 +103,6 @@ public class MessageConverter extends ConverterAdapter {
             return convertMimeMessage(msg, doc);
         } catch (Exception xerr) {
             throw new IOException("Unable to parse content", xerr);
-        } finally {
-            in.close();
         }
     }
 
@@ -121,7 +116,7 @@ public class MessageConverter extends ConverterAdapter {
      * @param msg javamail Message obj
      * @param doc converted doc for given message
      * @return doc conversion, likely a parent document with 1 or more child
-     *         attachments
+     * attachments
      * @throws MessagingException on err
      * @throws IOException        on err
      */
@@ -272,9 +267,8 @@ public class MessageConverter extends ConverterAdapter {
      * @throws IOException on error
      */
     public void parseMessage(Part bodyPart, ConvertedDocument parent, StringBuilder buf,
-            String msgPrefixId) throws IOException {
+                             String msgPrefixId) throws IOException {
 
-        InputStream partIO = null;
         ++attachmentNumber;
 
         try {
@@ -370,10 +364,8 @@ public class MessageConverter extends ConverterAdapter {
                         // (at least for text/plain attachments). -jgibson
                         logger.debug("{}# Save String MIME part", msgPrefixId);
                         if (meta.isQP() || meta.isBase64()) {
-                            try {
-                                // TODO: test decoding and charset settings. Lacking effective test data with
-                                // varied encodings.
-                                partIO = IOUtils.toInputStream(text, (meta.charset == null ? "UTF-8" : meta.charset));
+                            try (InputStream partIO = IOUtils.toInputStream(text, (meta.charset == null ? "UTF-8" : meta.charset))){
+                                // TODO: test decoding and charset settings. Lacking effective test data with varied encodings.
                                 byte[] textBytes = decodeMIMEText(partIO, meta.transferEncoding);
                                 if (meta.charset != null) {
                                     text = new String(textBytes, meta.charset);
@@ -412,70 +404,55 @@ public class MessageConverter extends ConverterAdapter {
                     return;
 
                 } else if (part instanceof InputStream) {
-
                     // Retrieve byte stream.
-                    partIO = (InputStream) part;
-                    Content child = createChildContent(filename, partIO, meta);
-                    copyMailAttrs(parent, child);
-                    parent.addRawChild(child);
+                    try (InputStream partStream = (InputStream) part){
+                        Content child = createChildContent(filename, partStream, meta);
+                        copyMailAttrs(parent, child);
+                        parent.addRawChild(child);
+                    }
 
                     // Exit point.
                     return;
                 } else {
                     /* MCU: identify unknown MIME parts */
-                    logger.debug("Skipping this an unknown bodyPart type: "
-                            + part.getClass().getName());
-                    // return;
+                    logger.debug("Skipping this an unknown bodyPart type: {}", part.getClass().getName());
                 }
             }
 
             if (bodyPart instanceof MimeBodyPart && !bodyPart.isMimeType("multipart/*")) {
-
                 logger.debug("{}# Saving {} ", msgPrefixId, filename);
                 if (meta.disposition == null || meta.isAttachment) {
 
-                    partIO = ((MimeBodyPart) bodyPart).getRawInputStream();
-                    Content child = createChildContent(filename, partIO, meta);
+                    try (InputStream partIO = ((MimeBodyPart) bodyPart).getRawInputStream()) {
+                        Content child = createChildContent(filename, partIO, meta);
 
-                    copyMailAttrs(parent, child);
-                    if (meta.isHTML() && (meta.isInline() || (!meta.isAttachment()))) {
-                        child.meta.setProperty(MAIL_KEY_PREFIX + "html-body", "true");
+                        copyMailAttrs(parent, child);
+                        if (meta.isHTML() && (meta.isInline() || (!meta.isAttachment()))) {
+                            child.meta.setProperty(MAIL_KEY_PREFIX + "html-body", "true");
+                        }
+                        parent.addRawChild(child);
                     }
-
-                    parent.addRawChild(child);
                 }
             }
-
         } catch (MessagingException e2) {
             logger.error("Extraction Failed on Messaging Exception", e2);
-        } finally {
-            if (partIO != null) {
-                partIO.close();
-            }
         }
     }
 
     /**
      * Abstract the encoding issue.
-     * 
+     *
      * @param stm raw stream
      * @param enc a transfer encoding named in the multipart header, see
      *            MimeUtility.decode() for more detail
      * @return byte data for the stream. Caller still has to decode to proper
-     *         charset.
+     * charset.
      * @throws Exception on error
      */
     private static byte[] decodeMIMEText(InputStream stm, String enc) throws Exception {
-        InputStream decodedContent = null;
-        try {
-            decodedContent = MimeUtility.decode(stm, enc);
+        try (InputStream decodedContent = MimeUtility.decode(stm, enc)) {
             return IOUtils.toByteArray(decodedContent);
-        } finally {
-            if (decodedContent != null) {
-                decodedContent.close();
-            }
         }
-
     }
 
     /**
@@ -592,9 +569,7 @@ public class MessageConverter extends ConverterAdapter {
             if (filename != null) {
                 String ext = FilenameUtils.getExtension(filename);
                 iscal = (iscal || (ext.equalsIgnoreCase("ics") || ext.equalsIgnoreCase("ical")));
-
-                isImage = (FileUtility.getFileDescription(filename) == FileUtility.IMAGE_MIMETYPE);
-
+                isImage = FileUtility.IMAGE_MIMETYPE.equals(FileUtility.getFileDescription(filename));
                 desc = "Image";
             }
 
@@ -630,7 +605,7 @@ public class MessageConverter extends ConverterAdapter {
 
         /**
          * is QP encoding
-         * 
+         *
          * @return true if is quoted-printable
          */
         public boolean isQP() {
@@ -731,7 +706,7 @@ public class MessageConverter extends ConverterAdapter {
      *
      * @param text text of a filename
      * @return file name constructed from input text and underscores in place of
-     *         special chars.
+     * special chars.
      */
     public static String createSafeFilename(String text) {
         String tmp = TextUtils.squeeze_whitespace(text).replaceAll(

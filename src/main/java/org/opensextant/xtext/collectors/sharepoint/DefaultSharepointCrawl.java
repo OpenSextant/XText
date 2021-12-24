@@ -16,13 +16,6 @@
  */
 package org.opensextant.xtext.collectors.sharepoint;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-
 import org.apache.http.HttpResponse;
 import org.opensextant.ConfigException;
 import org.opensextant.util.TextUtils;
@@ -36,20 +29,25 @@ import org.opensextant.xtext.collectors.web.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
+
 /**
  * TODO: generalize this so there is a single web crawler and the site implementation might be
  * sharepoint, generic HTTP, or other.  The objective of this crawler is to collect documents from
  * sharepoint.  Landing pages, e.g. HTML for sites and sub-sites,  themselves will not be harvested.
  *
  * @author ubaldino
- *
  */
 public class DefaultSharepointCrawl extends SharepointClient implements ExclusionFilter, Collector,
-CrawlFilter {
+        CrawlFilter {
     /**
      * A collection listener to consult as far as how to record the found &amp; converted content
      * as well as to determine what is worth saving.
-     *
      */
     protected CollectionListener listener = null;
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -59,13 +57,13 @@ CrawlFilter {
     /**
      * Instantiates a new default sharepoint crawl.
      *
-     * @param srcSite site url
+     * @param srcSite    site url
      * @param destFolder output folder
-     * @param u user ID
-     * @param p password
-     * @param dom domain
+     * @param u          user ID
+     * @param p          password
+     * @param dom        domain
      * @throws MalformedURLException on err
-     * @throws ConfigException on err
+     * @throws ConfigException       on err
      */
     public DefaultSharepointCrawl(String srcSite, String destFolder, String u, String p, String dom)
             throws MalformedURLException, ConfigException {
@@ -75,6 +73,7 @@ CrawlFilter {
     /**
      * Important that you set a listener if you want to see what was captured.
      * As well as optimize future harvests.  Listener tells the collector if the item in question was harvested or not.
+     *
      * @param l listener to use
      */
     public void setListener(CollectionListener l) {
@@ -85,6 +84,7 @@ CrawlFilter {
      * For web crawl, this default crawler considers flash, video media, etc. to be out of scope.
      * Other HREF links, like mailto:xyz@me.com  are also items to avoid.
      * Method is left open so you may override.
+     *
      * @param path a url
      */
     @Override
@@ -120,6 +120,7 @@ CrawlFilter {
     /**
      * Override this if you have differnt ideas about what URL patterns are of interest.
      * DEFAULT FILTER OUT:  video files, page anchors, mailto links
+     *
      * @param link found link
      * @return true if link should be ignored.
      */
@@ -223,16 +224,16 @@ CrawlFilter {
     /**
      * TODO: redesign so both Web crawl and Sharepoint crawl share this common routine:
      * copy copy copy -- see DefaultWebCrawl
-     *
+     * <p>
      * convert and record a downloaded item, given the item and its source URL.
+     *
      * @param item item
      * @param link original URL where item was found
-     * @throws IOException on err
-     * @throws ConfigException on err
+     * @throws IOException              on err
+     * @throws ConfigException          on err
      * @throws NoSuchAlgorithmException on err
      */
-    protected void convertContent(File item, HyperLink link) throws IOException, ConfigException,
-    NoSuchAlgorithmException {
+    protected void convertContent(File item, HyperLink link) throws IOException, NoSuchAlgorithmException {
 
         if (item == null || link == null) {
             throw new IOException("Bad data - null values for file and link...");
@@ -242,6 +243,8 @@ CrawlFilter {
             log.debug("Link {} was saved to {}", link.getAbsoluteURL(), item.getAbsolutePath());
             listener.collected(item);
             return;
+        } else if (converter == null) {
+            throw new ConfigException("No conversion configured here");
         }
 
         /*

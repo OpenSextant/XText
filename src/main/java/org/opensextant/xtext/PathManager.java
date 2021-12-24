@@ -485,11 +485,16 @@ public class PathManager {
      */
     public static String getRelativePath(String root, String p) {
         String _path = PathManager.fixPath(p);
-        int x = _path.indexOf(root); // Possibly a relative root.
-        if (x < 0) {
-            return p; // "root" not found in p. No relation between root and path given.
+        if (_path!=null) {
+            int x = _path.indexOf(root); // Possibly a relative root.
+            if (x < 0) {
+                return p; // "root" not found in p. No relation between root and path given.
+            }
+            return trimLeadingSlash(_path.substring(x));
         }
-        return trimLeadingSlash(_path.substring(x));
+        // If there is no valid alignment between the paths, then caller needs to test
+        //  /a/b   /x/y/file.txt   -- there is no common path.
+        return p;
     }
 
     /**

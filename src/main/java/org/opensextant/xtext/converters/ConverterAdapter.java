@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-// TODO: Auto-generated Javadoc
-
 /**
  * The Class ConverterAdapter.
  *
@@ -47,7 +45,7 @@ public abstract class ConverterAdapter implements Converter {
     /**
      * Not an iConvert interface, yet.
      * This would take great care in all implementations to ensure the converters do not rely on
-     * the "File doc" argument.
+     * the "File doc" argument.  Caller is responsible for closing stream
      *
      * @param data stream
      * @return the converted document
@@ -70,7 +68,9 @@ public abstract class ConverterAdapter implements Converter {
      */
     @Override
     public ConvertedDocument convert(String data) throws IOException {
-        return conversionImplementation(TikaInputStream.get(IOUtils.toInputStream(data, StandardCharsets.UTF_8)), null);
+        try (InputStream istream = IOUtils.toInputStream(data, StandardCharsets.UTF_8)) {
+            return conversionImplementation(TikaInputStream.get(istream), null);
+        }
     }
 
     /**
@@ -85,7 +85,8 @@ public abstract class ConverterAdapter implements Converter {
      */
     @Override
     public ConvertedDocument convert(java.io.File doc) throws IOException {
-        InputStream input = TikaInputStream.get(doc.toURI().toURL());
-        return conversionImplementation(input, doc);
+        try (InputStream input = TikaInputStream.get(doc.toURI().toURL())) {
+            return conversionImplementation(input, doc);
+        }
     }
 }

@@ -17,8 +17,10 @@
  */
 package org.opensextant.xtext.converters;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 import org.opensextant.util.FileUtility;
@@ -57,14 +59,13 @@ public class TextTranscodingConverter extends ConverterAdapter {
 
         byte[] data = null;
 
-        if (in != null) {
-            // Get byte data from input stream or file
-            if (doc != null) {
-                data = FileUtility.readBytesFrom(doc);
-            } else {
-                data = IOUtils.toByteArray(in);
+        // Get byte data from input stream or file
+        if (doc != null) {
+            try (FileInputStream docstream = new FileInputStream(doc)) {
+                data = IOUtils.toByteArray(docstream);
             }
-            in.close();
+        } else if (in != null) {
+            data = IOUtils.toByteArray(in);
         }
 
         if (data == null) {

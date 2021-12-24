@@ -205,8 +205,6 @@ public class ImageMetadataConverter extends ConverterAdapter {
             return imgDoc;
         } catch (Exception xerr) {
             throw new IOException("Unable to parse content", xerr);
-        } finally {
-            in.close();
         }
     }
 }

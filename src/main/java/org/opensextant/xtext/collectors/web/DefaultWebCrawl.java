@@ -18,6 +18,7 @@ package org.opensextant.xtext.collectors.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -225,23 +226,25 @@ public class DefaultWebCrawl extends WebClient implements ExclusionFilter, Colle
          * 1.  Capture the page content represented by the requested link.
          *     It is saved to  FILE.html
          */
-        String rawData = WebClient.readTextStream(page.getEntity().getContent());
+        try(InputStream pageStream = page.getEntity().getContent()) {
+            String rawData = WebClient.readTextStream(pageStream);
 
-        String thisPath = thisLink.getNormalPath();
-        if (thisLink.isDynamic() && (!thisPath.endsWith("html"))) {
-            thisPath = String.format("%s.html", thisPath);
+            String thisPath = thisLink.getNormalPath();
+            if (thisLink.isDynamic() && (!thisPath.endsWith("html"))) {
+                thisPath = String.format("%s.html", thisPath);
+            }
+            File thisPage = createArchiveFile(thisPath, thisLink.isFolder());
+            // OVERWRITE:
+            if (!thisPage.exists()) {
+                FileUtility.writeFile(rawData, thisPage.getAbsolutePath());
+            }
+            log.info("Starting in on {} from {} @ depth=" + depth, link, site);
+            pause();
+
+            ++depth;
+
+            collectItemsOnPage(rawData, thisLink.getURL(), getSite());
         }
-        File thisPage = createArchiveFile(thisPath, thisLink.isFolder());
-        // OVERWRITE:
-        if (!thisPage.exists()) {
-            FileUtility.writeFile(rawData, thisPage.getAbsolutePath());
-        }
-        log.info("Starting in on {} from {} @ depth=" + depth, link, site);
-        pause();
-
-        ++depth;
-
-        collectItemsOnPage(rawData, thisLink.getURL(), getSite());
     }
 
     /**

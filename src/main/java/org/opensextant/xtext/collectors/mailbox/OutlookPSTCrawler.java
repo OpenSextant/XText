@@ -654,17 +654,19 @@ public class OutlookPSTCrawler implements Collector {
                 }
             }
 
-            File attPath = new File(String.format("%s/%s", msgFolder.getAbsolutePath(), filename));
-            savePSTFile(attach.getFileInputStream(), attPath.getAbsolutePath());
+            try(InputStream fstream = attach.getFileInputStream()) {
+                File attPath = new File(String.format("%s/%s", msgFolder.getAbsolutePath(), filename));
+                savePSTFile(fstream, attPath.getAbsolutePath());
 
-            attachmentFilenames.add(filename);
+                attachmentFilenames.add(filename);
 
-            if (listener != null) {
-                listener.collected(attPath);
-            }
+                if (listener != null) {
+                    listener.collected(attPath);
+                }
 
-            if (converter != null) {
-                converter.convert(attPath);
+                if (converter != null) {
+                    converter.convert(attPath);
+                }
             }
         }
 
@@ -693,8 +695,6 @@ public class OutlookPSTCrawler implements Collector {
             byte[] endBuffer = new byte[count];
             System.arraycopy(buffer, 0, endBuffer, 0, count);
             out.write(endBuffer);
-        } finally {
-            stream.close();
         }
     }
 

@@ -79,8 +79,6 @@ public class DefaultConverter extends ConverterAdapter {
             throw new IOException("Unable to parse content due to Tika misconfiguration", classErr);
         } catch (Exception xerr) {
             throw new IOException("Unable to parse content", xerr);
-        } finally {
-            input.close();
         }
         ConvertedDocument textdoc = new ConvertedDocument(doc);
 

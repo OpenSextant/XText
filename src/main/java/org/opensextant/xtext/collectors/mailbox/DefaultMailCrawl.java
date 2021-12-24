@@ -62,7 +62,7 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
     }
 
     /** The Constant dateKeyFormat. */
-    final static SimpleDateFormat dateKeyFormat = new SimpleDateFormat("yyyyMMdd");
+    final SimpleDateFormat dateKeyFormat = new SimpleDateFormat("yyyyMMdd");
 
     /**
      * Creates the date folder.
@@ -356,15 +356,13 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
      */
     protected int saveMessageToFile(File dateFolder, Message msg, String oid, String fname)
             throws IOException, MessagingException {
-        OutputStream msgIO = null;
-        try {
-            File msgFolder = createMessageFolder(dateFolder, oid);
+        File msgFolder = createMessageFolder(dateFolder, oid);
 
-            // Save the file and do the conversion
-            //
-            String msgFilepath = String.format("%s/%s.eml", msgFolder, fname);
-            File msgFile = new File(msgFilepath);
-            msgIO = new FileOutputStream(msgFile);
+        // Save the file and do the conversion
+        //
+        String msgFilepath = String.format("%s/%s.eml", msgFolder, fname);
+        File msgFile = new File(msgFilepath);
+        try (OutputStream msgIO = new FileOutputStream(msgFile)){
             // Requirement:  Write data to disk first, saving a ".eml" file.
             msg.writeTo(msgIO);
 
@@ -373,12 +371,9 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
             //
             converter.convertFile(msgFile);
             return 0;
-
         } catch (Exception msgErr) {
             log.error("Failed reading, saving document", msgErr);
             return -1;
-        } finally {
-            msgIO.close();
         }
     }
 }
