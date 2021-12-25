@@ -51,7 +51,7 @@ public class MessageConverterTest {
     public static void setupTemporaryFolder() throws IOException {
         TEST_FILE = TEMP_DIR.newFile("mimeEmailWithAttachmentsTest.eml");
         FileUtils.copyInputStreamToFile(
-                MessageConverterTest.class.getResourceAsStream("mimeEmailWithAttachmentsTest.eml"), TEST_FILE);
+                MessageConverterTest.class.getResourceAsStream("/multimedia-tests/mimeEmailWithAttachmentsTest.eml"), TEST_FILE);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class MessageConverterTest {
         Assert.assertNotNull("text attachment was not found, available attachments are: " + children.keySet(),
                 text_attach);
 
-        String orig_text_attach = IOUtils.toString(getClass().getResourceAsStream("xtext-embedded-attached-text.txt"),
+        String orig_text_attach = IOUtils.toString(getClass().getResourceAsStream("/multimedia-tests/xtext-embedded-attached-text.txt"),
                 "UTF-8");
         String sep = System.getProperty("line.separator");
         if (!"\r\n".equals(sep)) {
