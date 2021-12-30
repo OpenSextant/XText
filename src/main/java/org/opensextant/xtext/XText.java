@@ -60,15 +60,17 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * TEXT OUTPUT form includes a JSON document header with metadata properties
  * from the original item. These are valid elements of the conversion process.
  * We try to maintain them apart from the true, readable text of the document.
- * <p>
+ * </p>
  * <p>
  * Add a ConversiontListener to XText instance to capture the converted document
  * as it comes out of the main loop for converting archives and folders.
- * <p>
- * extractText() runs over any file type and extracts text, saving it pushing
+ * </p> 
+ * <br>
+ * - extractText() runs over any file type and extracts text, saving it pushing
  * events to one optional listener
- * <p>
- * convertFile(File) will convert a single file, returning a ConvertedDocument
+ * <br>
+ * - convertFile(File) will convert a single file, returning a ConvertedDocument
+ * <br>
  *
  * @author Marc C. Ubaldino, MITRE, ubaldino at mitre dot org
  */

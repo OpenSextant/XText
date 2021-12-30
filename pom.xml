@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.opensextant</groupId>
-    <version>3.5.3</version>
+    <version>3.5.4</version>
     <name>XText</name>
     <artifactId>opensextant-xponents-xtext</artifactId>
     <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.opensextant</groupId>
             <artifactId>opensextant-xponents-core</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.opensextant</groupId>
@@ -119,12 +119,12 @@
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
-            <version>1.27</version>
+            <version>1.28</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-parsers</artifactId>
-            <version>1.27</version>
+            <version>1.28</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.sis.storage</groupId>
@@ -519,30 +519,6 @@
             </plugin>
         </plugins>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <!-- slow: -->
-                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>javadoc</report>
-                            <!--<report>test-javadoc</report> -->
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
     <profiles>
         <profile>
             <id>release</id>

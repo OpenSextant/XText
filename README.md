@@ -122,7 +122,8 @@ An example:
 
 ### v3.5 NEW BEGINNING
 
-- Xponents v3.5.2 series released for major updates on versions and Log4J resolution
+- Xponents v3.5.4 series released for major updates on versions and Log4J resolution
+- Tika 1.28 and PDFBox 2.0.25 are upgraded here, in part due to Log4J updates
 
 ### v3.4  VAMP
 
