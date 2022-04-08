@@ -8,3 +8,6 @@
 lib/
 output/
 dist/
+.idea/
+*.iml
+*.ipr
