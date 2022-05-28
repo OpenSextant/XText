@@ -20,9 +20,8 @@ public class MailClientTest {
     public static void main(String[] args) {
         try {
             System.out.println("Usage:  MailClientTest   cfg-url  /save/to/archive");
-            MailConfig imapClientCfg;
             URL abc = MailClient.class.getResource(args[0]);
-            imapClientCfg = new MailConfig(abc);
+            MailConfig imapClientCfg = new MailConfig(abc);
 
             MailClient imapClient = new MailClient(imapClientCfg, args[1]);
             imapClient.connect();

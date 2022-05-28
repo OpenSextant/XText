@@ -418,7 +418,9 @@ public class OutlookPSTCrawler implements Collector {
     }
 
     protected static void formatFields(List<OutlookPSTCrawler.Field> fields, StringBuilder buf) {
-
+        if (fields == null){
+            return;
+        }
         for (Field f : fields) {
             buf.append(f.label);
             buf.append(":\t");

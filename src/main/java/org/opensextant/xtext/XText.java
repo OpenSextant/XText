@@ -21,7 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.tika.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.opensextant.ConfigException;
 import org.opensextant.util.FileUtility;
 import org.opensextant.xtext.collectors.ArchiveNavigator;

@@ -144,7 +144,7 @@ public class SharepointClient extends WebClient {
                 link = link.substring(0, link.length() - 1);
             }
             try {
-                SPLink l = new SPLink(prepURLPath(link).toString(), pageUrl);
+                SPLink l = new SPLink(prepURLPath(link), pageUrl);
                 if (l.isResource()){
                     continue;
                 }

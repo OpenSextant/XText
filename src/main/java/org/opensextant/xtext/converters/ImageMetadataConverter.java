@@ -193,7 +193,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
                 imgDoc.addUserProperty("location", String.format("%s, %s", lat, lon));
                 try {
                     LatLon yx = GeodeticUtility.parseLatLon(lat, lon);
-                    buf.append("Location:\t" + formatCoord(yx) + "\n");
+                    buf.append(String.format("Location:\t%s\n", formatCoord(yx)));
                 } catch (ParseException parseErr) {
                     //
                 }

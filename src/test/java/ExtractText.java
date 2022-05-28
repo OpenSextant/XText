@@ -1,5 +1,7 @@
 import java.io.IOException;
 
+import org.apache.commons.cli.*;
+import org.opensextant.ConfigException;
 import org.opensextant.util.FileUtility;
 import org.opensextant.xtext.ConversionListener;
 import org.opensextant.xtext.ConvertedDocument;
@@ -7,29 +9,8 @@ import org.opensextant.xtext.XText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gnu.getopt.LongOpt;
-
 public class ExtractText {
 
-    public static void usage() {
-        System.out.println();
-        System.out.println("==========XText Usage=============");
-        System.out.println("XText --input input  [--help] "
-                + "\n\t[--embed-conversion | --output folder ]   "
-                + "\n\t[--embed-children   | --export folder] "
-                + "\n\t[--clean-html]   [--strip-prefix path]");
-        System.out.println("\t--help  print this message");
-        System.out.println("\t--input  where <input> is file or folder");
-        System.out.println("\t--output  where <folder> is output is a folder where you want to archive converted docs");
-        System.out.println("\t--embed-children embeds the saved conversions in the input folder under 'xtext/'");
-        System.out.println("\t--embed-conversion embeds the extracted children binaries in the input folder");
-        System.out.println("         (NOT the conversions, the binaries from Archives, PST, etc)");
-        System.out.println("         Default behavior is to extract originals to output archive.");
-        System.out.println("\t--export folder\tOpposite of -c. Extract children and save to <folder>");
-        System.out.println("         NOTE: -e has same effect as setting output to input");
-        System.out.println("\t--clean-html enables HTML scrubbing");
-        System.out.println("========================");
-    }
 
     /**
      * Purely for logging when using the cmd line variation.
@@ -59,22 +40,25 @@ public class ExtractText {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ConfigException{
 
-        LongOpt[] options = { new LongOpt("input", LongOpt.REQUIRED_ARGUMENT, null, 'i'),
-                new LongOpt("output", LongOpt.REQUIRED_ARGUMENT, null, 'o'),
-                new LongOpt("export", LongOpt.REQUIRED_ARGUMENT, null, 'x'),
-                new LongOpt("strip-prefix", LongOpt.REQUIRED_ARGUMENT, null, 'p'),
-                new LongOpt("verbose", LongOpt.NO_ARGUMENT, null, 'v'),
-                new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'),
-                new LongOpt("clean-html", LongOpt.NO_ARGUMENT, null, 'H'),
-                new LongOpt("embed-conversion", LongOpt.NO_ARGUMENT, null, 'e'),
-                new LongOpt("embed-children", LongOpt.NO_ARGUMENT, null, 'c'),
-                new LongOpt("tika-pst", LongOpt.NO_ARGUMENT, null, 'T') };
+        Options options = new Options();
 
-        // "hcex:i:o:p:"
-        gnu.getopt.Getopt opts = new gnu.getopt.Getopt("XText", args, "", options);
+        // Args
+        options.addOption("i", "input", true, "Input FILE or FOLDER");
+        options.addOption("o", "output", true, "Output FOLDER");
+        options.addOption("p", "strip-prefix", true, "Remove leading part of a path");
 
+        // Flags
+        options.addOption("v", "verbose", false, "verbose output");
+        options.addOption("c", "embed-children", false, "embed children items in input folder as they are converted");
+        options.addOption("e", "embed-conversion", false, "embeds the extracted children binaries in the input folder (NOT the conversions, the binaries from Archives, PST, etc)  Default behavior is to extract originals to output archive.");
+        options.addOption("x", "export", false, "EXPERIMENTAL for archive files: export child conversions to a folder other than the output folder");
+        options.addOption("H", "clean-html", false, "scrub HTML content to yield readable text");
+        options.addOption("T", "tika-pst", false, "use Tika PST for MS Office messages");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = null;
         String input = null;
         String output = null;
         boolean embed = false;
@@ -83,61 +67,66 @@ public class ExtractText {
         boolean verbose = false;
         String saveChildrenTo = null;
         String prefix = null;
-
-        XText xt = new XText();
+        boolean tikapst = false;
 
         try {
-            int c;
-            while ((c = opts.getopt()) != -1) {
-                switch (c) {
+            cmd = parser.parse(options, args);
 
-                case 0:
-                    // Long opt processed.
 
-                    break;
-
-                case 'i':
-                    input = opts.getOptarg();
-                    break;
-                case 'o':
-                    output = opts.getOptarg();
-                    break;
-                case 'H':
-                    filter_html = true;
-                    break;
-                case 'c':
-                    saveChildrenWithInput = true;
-                    break;
-                case 'x':
-                    saveChildrenTo = opts.getOptarg();
-                    break;
-                case 'p':
-                    prefix = opts.getOptarg();
-                    break;
-                case 'v':
-                    verbose = true;
-                    break;
-                case 'e':
-                    embed = true;
-                    System.out.println("Saving conversions to Input folder.  Output folder will be ignored.");
-                    break;
-                case 'T':
-                    xt.enableTikaPST(true);
-                    break;
-                case 'h':
-                default:
-                    usage();
-                    System.exit(1);
-                }
+            String opt = "input";
+            if (cmd.hasOption(opt)){
+                input = cmd.getOptionValue(opt);
             }
+             opt = "output";
+            if (cmd.hasOption(opt)){
+                output = cmd.getOptionValue(opt);
+            }
+
+            opt ="export";
+            if (cmd.hasOption(opt)){
+                saveChildrenTo = cmd.getOptionValue(opt);;
+            }
+            opt ="strip-prefix";
+            if (cmd.hasOption(opt)){
+                prefix = cmd.getOptionValue(opt);;
+            }
+
+            // FLAGS
+             opt = "clean-html";
+            if (cmd.hasOption(opt)){
+                filter_html = true;
+            }
+            opt = "embed-children";
+            if (cmd.hasOption(opt)){
+                saveChildrenWithInput = true;
+            }
+            opt = "verbose";
+            if (cmd.hasOption(opt)){
+                verbose = true;
+            }
+            opt = "embed-conversions";
+            if (cmd.hasOption(opt)){
+                embed = true;
+            }
+            opt = "tika-pst";
+            if (cmd.hasOption(opt)){
+                tikapst = true;
+            }
+
         } catch (Exception err) {
-            usage();
-            System.exit(1);
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("ExtractText", " convert files to textual versions with metadata", options, "", true);
         }
 
         if (input == null) {
             System.out.println("An input argument is required, e.g., -input=/Folder/...");
             System.exit(-1);
+        }
+
+        XText xt = null;
+        xt = new XText();
+        if (tikapst){
+            xt.enableTikaPST(true);
         }
 
         // Setting LANG=en_US in your shell.
@@ -182,8 +171,7 @@ public class ExtractText {
             xt.setup();
             xt.extractText(input);
         } catch (IOException ioerr) {
-            usage();
-            ioerr.printStackTrace();
+            System.err.println(ioerr.getMessage());
         }
     }
 
