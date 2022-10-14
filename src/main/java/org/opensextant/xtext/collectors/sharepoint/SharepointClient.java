@@ -109,7 +109,7 @@ public class SharepointClient extends WebClient {
         }
 
         RequestConfig globalConfig = RequestConfig.custom()
-                .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY).build();
+                .setCookieSpec(CookieSpecs.DEFAULT).build();
 
         CredentialsProvider creds = new BasicCredentialsProvider();
         creds.setCredentials(AuthScope.ANY, new NTCredentials(user, passwd, server, domain));

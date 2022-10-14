@@ -267,7 +267,7 @@ public class WebClient {
         }
 
         RequestConfig globalConfig = RequestConfig.custom()
-                .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY).build();
+                .setCookieSpec(CookieSpecs.DEFAULT).build();
 
         HttpClient httpClient = clientHelper.setDefaultRequestConfig(globalConfig).build();
 

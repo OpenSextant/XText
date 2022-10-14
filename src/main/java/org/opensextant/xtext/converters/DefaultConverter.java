@@ -75,7 +75,7 @@ public class DefaultConverter extends ConverterAdapter {
 
         try {
             parser.parse(input, handler, metadata, ctx);
-        } catch (NoClassDefFoundError classErr){
+        } catch (NoClassDefFoundError classErr) {
             throw new IOException("Unable to parse content due to Tika misconfiguration", classErr);
         } catch (Exception xerr) {
             throw new IOException("Unable to parse content", xerr);
@@ -87,15 +87,13 @@ public class DefaultConverter extends ConverterAdapter {
         textdoc.addCreateDate(metadata.getDate(TikaCoreProperties.CREATED));
         textdoc.addAuthor(metadata.get(TikaCoreProperties.CREATOR));
 
-        // v1.5:  until this version this blank line reducer was in place.
-        //     Using Java6 it appeared to cause StackOverflow when it encountered a document hundreds of \n in a row.
-        //     Eg.., a Spreadsheet doc converted to text may have thousands of empty lines following the last data row.
-        // TextUtils.reduce_line_breaks(txt)
         String t = handler.toString();
         if (t != null) {
-            if (textdoc.filename!= null && FileUtility.isSpreadsheet(textdoc.filename)) {
+            if (textdoc.filename != null && FileUtility.isSpreadsheet(textdoc.filename)) {
+                // REMOVE TRAILING BLANK LINES/ROWS
                 textdoc.setText(t.trim());
             } else {
+                // REMOVE REPEATING BLANK LINES
                 textdoc.setText(TextUtils.reduce_line_breaks(t));
             }
         }
