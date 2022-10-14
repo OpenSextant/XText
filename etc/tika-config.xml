@@ -1,27 +1,17 @@
 <properties>
-    <service-loader initializableProblemHandler="ignore"/>
-    <service-loader loadErrorHandler="WARN"/>
+  <service-loader initializableProblemHandler="ignore"/>
+  <service-loader loadErrorHandler="WARN"/>
 
-    <parsers>
-        <parser class="org.apache.tika.parser.DefaultParser">
-            <parser-exclude class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
-        </parser>
-    </parsers>
+  <parsers>
 
-    <!--  Tika leaves us guessing at how to filter for unwanted parsers.
-       Exclude the parsers from the POM.  MATLab files we'll never encounter, for example.
-       But filtering them out is challenging here.
+    <parser class="org.apache.tika.parser.html.HtmlParser"></parser>
+    <parser class="org.apache.tika.parser.mbox.MboxParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.OfficeParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.ooxml.OOXMLParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.pst.OutlookPSTParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.rtf.RTFParser"></parser>
+    <parser class="org.apache.tika.parser.odf.OpenDocumentParser"></parser>
+    <parser class="org.apache.tika.parser.pdf.PDFParser"></parser>
 
-    <detectors>
-        <detector class="org.apache.tika.detect.DefaultDetector">
-            <detector-exclude class="org.apache.tika.parser.mat.MatDetector"/>
-        </detector>
-    </detectors>
-    <parsers>
-        <parser class="org.apache.tika.parser.DefaultParser">
-            <parser-exclude class="org.apache.tika.parser.mat.MatParser"/>
-            <parser-exclude class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
-        </parser>
-    </parsers>
-    -->
+  </parsers>
 </properties>

@@ -145,7 +145,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
             parser.parse(in, handler, metadata, ctx);
 
             if (objName == null) {
-                objName = metadata.get(Metadata.RESOURCE_NAME_KEY);
+                objName = metadata.get(TikaCoreProperties.RESOURCE_NAME_KEY);
             }
 
             // What is the signal to generate any text buffer at all?

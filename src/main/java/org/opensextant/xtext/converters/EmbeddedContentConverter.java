@@ -31,6 +31,7 @@ import org.apache.tika.extractor.EmbeddedResourceHandler;
 import org.apache.tika.extractor.ParserContainerExtractor;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.mime.MediaType;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
@@ -240,7 +241,7 @@ public class EmbeddedContentConverter extends DefaultConverter {
 
             log.debug("Embbedded object file={} has filename? {}", filename, has_fname);
 
-            md.add(Metadata.RESOURCE_NAME_KEY, filename);
+            md.add(TikaCoreProperties.RESOURCE_NAME_KEY, filename);
 
             Content child = new Content();
             child.id = filename;

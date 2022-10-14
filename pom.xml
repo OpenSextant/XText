@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.5.6</version>
+  <version>3.6.0-SNAPSHOT</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
@@ -34,7 +34,9 @@
     </developer>
   </developers>
   <properties>
-    <slf4j.version>1.7.36</slf4j.version>
+    <slf4j.version>2.0.3</slf4j.version>
+    <tika.version>2.5.0</tika.version>
+    <log4j.version>2.19.0</log4j.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -54,7 +56,7 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.11</version>
+        <version>1.4.4</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -62,7 +64,7 @@
     <dependency>
       <groupId>org.opensextant</groupId>
       <artifactId>opensextant-xponents-core</artifactId>
-      <version>3.5.9</version>
+      <version>3.5.10</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
@@ -97,12 +99,12 @@
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
-      <version>70.1</version>
+      <version>71.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.9</version>
+      <version>1.10.0</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -151,6 +153,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -206,12 +213,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.4.14</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpmime</artifactId>
-      <version>4.5.13</version>
+      <version>4.4.15</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
@@ -231,102 +233,42 @@
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-core</artifactId>
-      <version>1.28.3</version>
+      <version>${tika.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tika</groupId>
-      <artifactId>tika-parsers</artifactId>
-      <version>1.28.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.sis.storage</groupId>
-          <artifactId>sis-netcdf</artifactId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-logging</artifactId>
-          <groupId>commons-logging</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>httpservices</artifactId>
-          <groupId>edu.ucar</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>junrar</artifactId>
-          <groupId>com.github.junrar</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>netcdf4</artifactId>
-          <groupId>edu.ucar</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>grib</artifactId>
-          <groupId>edu.ucar</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>cdm</artifactId>
-          <groupId>edu.ucar</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>cxf-rt-rs-client</artifactId>
-          <groupId>org.apache.cxf</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>vorbis-java-core</artifactId>
-          <groupId>org.gagravarr</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>vorbis-java-tika</artifactId>
-          <groupId>org.gagravarr</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>sis-metadata</artifactId>
-          <groupId>org.apache.sis.core</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>sis-utility</artifactId>
-          <groupId>org.apache.sis.core</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jmatio</artifactId>
-          <groupId>net.sourceforge.jmatio</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>opennlp-tools</artifactId>
-          <groupId>org.apache.opennlp</groupId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.json</groupId>
-          <artifactId>json</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>edu.usc.ir</groupId>
-          <artifactId>sentiment-analysis-parser</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.tallison</groupId>
-          <artifactId>jmatio</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.rometools</groupId>
-          <artifactId>rome</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.uima</groupId>
-          <artifactId>uimafit-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.uima</groupId>
-          <artifactId>uimaj-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.quartz-scheduler</groupId>
-          <artifactId>quartz</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.mchange</groupId>
-          <artifactId>c3p0</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>tika-parser-html-module</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-mail-commons</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-mail-module</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-html-commons</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-microsoft-module</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-miscoffice-module</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parser-pdf-module</artifactId>
+      <version>${tika.version}</version>
     </dependency>
   </dependencies>
   <build>
@@ -355,7 +297,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.0.0-M5</version>
+          <version>3.0.0-M2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -389,7 +331,9 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.0</version>
         <configuration>
           <source>1.8</source>
           <header>&lt;img alt='[OpenSextant Logo]' height='36'
@@ -411,6 +355,7 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
@@ -420,6 +365,7 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.8</source>
@@ -431,6 +377,7 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <executions>
           <execution>
@@ -442,6 +389,7 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
@@ -468,6 +416,7 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <additionalClasspathElements>
@@ -483,7 +432,9 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.1</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
