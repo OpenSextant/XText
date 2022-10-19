@@ -3,11 +3,11 @@ XText
 ```
     Author: Marc. C. Ubaldino, MITRE Corporation
     Date: 2013-March
-    Updated: 2021-April
+    Updated: 2021-April, 2022-Oct
     Copyright MITRE Corporation, 2012-2021
 ```
 
-Apache Tika is awesome, and...
+Apache Tika is awesome, but...
 ----------------------
 Tika provides all sorts of solid content conversion and parsing capabilities.  But it is a 
 developer's tool -- for those who want to get close to all the gory details.  There is some 
@@ -119,6 +119,12 @@ An example:
 
 
 # RELEASE NOTES
+
+### v3.6 TIKA MASALA
+
+- Tika 2.5+ upgrade: Deprecated API uses removed; Tika dependencies and namespace resolved
+- Log4J usage: Certain packages rely on Log4J for compiled code (POI, Tika, etc). So keep Log4J API/Core in classpath, 
+  but in separate classpath such that SLF4J finds the logger implementation desired.  Logback is used here
 
 ### v3.5 NEW BEGINNING
 
