@@ -17,17 +17,6 @@
  */
 package org.opensextant.xtext.converters;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.opensextant.util.FileUtility;
-import org.opensextant.util.TextUtils;
-import org.opensextant.xtext.Content;
-import org.opensextant.xtext.ConvertedDocument;
-import org.opensextant.xtext.Converter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.mail.*;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -42,6 +31,16 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.opensextant.util.FileUtility;
+import org.opensextant.util.TextUtils;
+import org.opensextant.xtext.Content;
+import org.opensextant.xtext.ConvertedDocument;
+import org.opensextant.xtext.Converter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /*
@@ -364,7 +363,7 @@ public class MessageConverter extends ConverterAdapter {
                         // (at least for text/plain attachments). -jgibson
                         logger.debug("{}# Save String MIME part", msgPrefixId);
                         if (meta.isQP() || meta.isBase64()) {
-                            try (InputStream partIO = IOUtils.toInputStream(text, (meta.charset == null ? "UTF-8" : meta.charset))){
+                            try (InputStream partIO = IOUtils.toInputStream(text, (meta.charset == null ? "UTF-8" : meta.charset))) {
                                 // TODO: test decoding and charset settings. Lacking effective test data with varied encodings.
                                 byte[] textBytes = decodeMIMEText(partIO, meta.transferEncoding);
                                 if (meta.charset != null) {
@@ -405,7 +404,7 @@ public class MessageConverter extends ConverterAdapter {
 
                 } else if (part instanceof InputStream) {
                     // Retrieve byte stream.
-                    try (InputStream partStream = (InputStream) part){
+                    try (InputStream partStream = (InputStream) part) {
                         Content child = createChildContent(filename, partStream, meta);
                         copyMailAttrs(parent, child);
                         parent.addRawChild(child);
@@ -503,7 +502,9 @@ public class MessageConverter extends ConverterAdapter {
         Content child = new Content();
         child.id = file_id;
         child.encoding = meta.charset;
-        child.meta.setProperty(ConvertedDocument.CHILD_ENTRY_KEY, file_id);
+        if (file_id != null) {
+            child.meta.setProperty(ConvertedDocument.CHILD_ENTRY_KEY, file_id);
+        }
 
         child.meta.setProperty(MAIL_KEY_PREFIX + "disposition", (meta.disposition == null ? "none"
                 : meta.disposition));

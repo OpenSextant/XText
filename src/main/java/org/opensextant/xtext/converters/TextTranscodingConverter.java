@@ -20,15 +20,12 @@ package org.opensextant.xtext.converters;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.io.IOUtils;
-import org.opensextant.util.FileUtility;
-import org.opensextant.util.TextUtils;
-import org.opensextant.xtext.ConvertedDocument;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
+import org.apache.commons.io.IOUtils;
+import org.opensextant.util.TextUtils;
+import org.opensextant.xtext.ConvertedDocument;
 
 /**
  * Text converter that detects original encoding to include pure ASCII, Latin1, UTF-8 etc

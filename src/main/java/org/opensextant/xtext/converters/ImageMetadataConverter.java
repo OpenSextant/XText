@@ -145,7 +145,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
             parser.parse(in, handler, metadata, ctx);
 
             if (objName == null) {
-                objName = metadata.get(Metadata.RESOURCE_NAME_KEY);
+                objName = metadata.get(TikaCoreProperties.RESOURCE_NAME_KEY);
             }
 
             // What is the signal to generate any text buffer at all?
@@ -193,7 +193,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
                 imgDoc.addUserProperty("location", String.format("%s, %s", lat, lon));
                 try {
                     LatLon yx = GeodeticUtility.parseLatLon(lat, lon);
-                    buf.append("Location:\t" + formatCoord(yx) + "\n");
+                    buf.append(String.format("Location:\t%s\n", formatCoord(yx)));
                 } catch (ParseException parseErr) {
                     //
                 }

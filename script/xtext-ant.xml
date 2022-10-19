@@ -5,12 +5,13 @@
   <path id="runtime.classpath">
     <pathelement location="${xtext}/etc" />
     <fileset dir="${xtext}/lib" includes="**/*.jar" />
+    <fileset dir="${xtext}/lib/logging" includes="**/*.jar" />
   </path>
 
   <!-- XText convert the input and save in output folder-->
     <target name="convert">
         <java classname="org.opensextant.xtext.XText"  classpathref="runtime.classpath" fork="yes" dir="${xtext}">
-            <jvmarg value="-Xmx600m"/>
+            <jvmarg value="-Xmx512m"/>
             <jvmarg value="-Dlogback.configurationFile=${xtext}/etc/logback.xml" />
             <jvmarg value="-Dtika.config=${xtext}/etc/tika-config.xml" />
             <arg value="-i"/>

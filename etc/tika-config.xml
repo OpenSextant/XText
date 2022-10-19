@@ -1,8 +1,17 @@
 <properties>
-    <service-loader initializableProblemHandler="ignore"/>
-    <parsers>
-        <parser class="org.apache.tika.parser.DefaultParser">
-           <parser-exclude class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
-        </parser>
-    </parsers>
+  <service-loader initializableProblemHandler="ignore"/>
+  <service-loader loadErrorHandler="WARN"/>
+
+  <parsers>
+
+    <parser class="org.apache.tika.parser.html.HtmlParser"></parser>
+    <parser class="org.apache.tika.parser.mbox.MboxParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.OfficeParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.ooxml.OOXMLParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.pst.OutlookPSTParser"></parser>
+    <parser class="org.apache.tika.parser.microsoft.rtf.RTFParser"></parser>
+    <parser class="org.apache.tika.parser.odf.OpenDocumentParser"></parser>
+    <parser class="org.apache.tika.parser.pdf.PDFParser"></parser>
+
+  </parsers>
 </properties>

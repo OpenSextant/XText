@@ -16,6 +16,9 @@
  */
 package org.opensextant.xtext.collectors.mailbox;
 
+import javax.mail.Flags;
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,11 +26,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.mail.Flags;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-
-import org.opensextant.ConfigException;
 import org.opensextant.util.TextUtils;
 import org.opensextant.xtext.ConversionListener;
 import org.opensextant.xtext.ConvertedDocument;
@@ -126,7 +124,7 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
     /**
      * Email parser, converter, recorder.  This routine handles one message that
      * may have a number of attachments (children)
-     * 
+     *
      * IOException is logged if handling of children documents+conversions fails.
      * TODO: handleConversion should throw IOException or use listener to report errors for this document
      *
@@ -182,7 +180,7 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
 
     /**
      * TODO:
-     * 
+     *
      * pull all mail messages,
      * - create reasonable  FILE.msg  file name
      * - use XText to iterate over each msg file for conversion
@@ -342,7 +340,7 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
     /**
      * A very specific MESSAGE -&gt;&gt; FILE archiving method.
      * Mail item will end up in:
-     * 
+     *
      *   YYYYMMDD/MSGID/SUBJ.eml  .. the original email.
      *   YYYYMMDD/MSGID/SUBJ_eml/ .. attachments here..
      *
@@ -362,7 +360,7 @@ public class DefaultMailCrawl extends MailClient implements ConversionListener, 
         //
         String msgFilepath = String.format("%s/%s.eml", msgFolder, fname);
         File msgFile = new File(msgFilepath);
-        try (OutputStream msgIO = new FileOutputStream(msgFile)){
+        try (OutputStream msgIO = new FileOutputStream(msgFile)) {
             // Requirement:  Write data to disk first, saving a ".eml" file.
             msg.writeTo(msgIO);
 
