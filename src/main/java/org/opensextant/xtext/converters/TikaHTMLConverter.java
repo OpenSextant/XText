@@ -17,25 +17,25 @@
  */
 package org.opensextant.xtext.converters;
 
-import net.htmlparser.jericho.StartTag;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.metadata.TikaCoreProperties;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.sax.boilerpipe.BoilerpipeContentHandler;
-import org.apache.tika.parser.html.HtmlParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.opensextant.util.TextUtils;
-import org.opensextant.xtext.ConvertedDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.ContentHandler;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.htmlparser.jericho.StartTag;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.html.HtmlParser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.boilerpipe.BoilerpipeContentHandler;
+import org.opensextant.util.TextUtils;
+import org.opensextant.xtext.ConvertedDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.ContentHandler;
 
 /**
  * A Tika HTML parser that reduces large amounts of empty lines in converted
@@ -86,9 +86,8 @@ public class TikaHTMLConverter extends ConverterAdapter {
      * Initialize a reusable HTML parser.
      *
      * @param article_only true if you want to scrub HTML
-     * @throws IOException on err
      */
-    public TikaHTMLConverter(boolean article_only) throws IOException {
+    public TikaHTMLConverter(boolean article_only) {
         scrubHTMLArticle = article_only;
     }
 
@@ -97,9 +96,8 @@ public class TikaHTMLConverter extends ConverterAdapter {
      *
      * @param article_only true if you want to scrub HTML
      * @param docSize      a maximum raw HTML document size
-     * @throws IOException on err
      */
-    public TikaHTMLConverter(boolean article_only, int docSize) throws IOException {
+    public TikaHTMLConverter(boolean article_only, int docSize) {
         this(article_only);
         maxHTMLDocumentSize = docSize;
     }

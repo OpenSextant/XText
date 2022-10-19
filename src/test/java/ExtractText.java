@@ -15,7 +15,7 @@ public class ExtractText {
     /**
      * Purely for logging when using the cmd line variation.
      * *
-     * 
+     *
      * @author ubaldino
      */
     static class MainProgramListener implements ConversionListener {
@@ -40,7 +40,7 @@ public class ExtractText {
         }
     }
 
-    public static void main(String[] args) throws ConfigException{
+    public static void main(String[] args) throws ConfigException {
 
         Options options = new Options();
 
@@ -74,42 +74,44 @@ public class ExtractText {
 
 
             String opt = "input";
-            if (cmd.hasOption(opt)){
+            if (cmd.hasOption(opt)) {
                 input = cmd.getOptionValue(opt);
             }
-             opt = "output";
-            if (cmd.hasOption(opt)){
+            opt = "output";
+            if (cmd.hasOption(opt)) {
                 output = cmd.getOptionValue(opt);
             }
 
-            opt ="export";
-            if (cmd.hasOption(opt)){
-                saveChildrenTo = cmd.getOptionValue(opt);;
+            opt = "export";
+            if (cmd.hasOption(opt)) {
+                saveChildrenTo = cmd.getOptionValue(opt);
+                ;
             }
-            opt ="strip-prefix";
-            if (cmd.hasOption(opt)){
-                prefix = cmd.getOptionValue(opt);;
+            opt = "strip-prefix";
+            if (cmd.hasOption(opt)) {
+                prefix = cmd.getOptionValue(opt);
+                ;
             }
 
             // FLAGS
-             opt = "clean-html";
-            if (cmd.hasOption(opt)){
+            opt = "clean-html";
+            if (cmd.hasOption(opt)) {
                 filter_html = true;
             }
             opt = "embed-children";
-            if (cmd.hasOption(opt)){
+            if (cmd.hasOption(opt)) {
                 saveChildrenWithInput = true;
             }
             opt = "verbose";
-            if (cmd.hasOption(opt)){
+            if (cmd.hasOption(opt)) {
                 verbose = true;
             }
-            opt = "embed-conversions";
-            if (cmd.hasOption(opt)){
+            opt = "embed-conversion";
+            if (cmd.hasOption(opt)) {
                 embed = true;
             }
             opt = "tika-pst";
-            if (cmd.hasOption(opt)){
+            if (cmd.hasOption(opt)) {
                 tikapst = true;
             }
 
@@ -125,7 +127,7 @@ public class ExtractText {
 
         XText xt = null;
         xt = new XText();
-        if (tikapst){
+        if (tikapst) {
             xt.enableTikaPST(true);
         }
 

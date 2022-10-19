@@ -16,22 +16,23 @@
 
 package org.opensextant.xtext.converters.test;
 
+import javax.activation.MimeType;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.activation.MimeType;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.opensextant.xtext.Content;
 import org.opensextant.xtext.ConvertedDocument;
+import org.opensextant.xtext.Converter;
 import org.opensextant.xtext.converters.MessageConverter;
+import org.opensextant.xtext.converters.TikaHTMLConverter;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -55,22 +56,37 @@ public class MessageConverterTest {
     }
 
     @Test
+    public void formattingTest() throws Exception {
+
+        Converter payloadConverter = new TikaHTMLConverter(false);
+        MessageConverter conv = new MessageConverter();
+
+        String t = conv.adhocHTMLUnformatter("Barb,<P/>\n<FONT size=2>Mom,<BR/>\nI'm home</FONT>&nbSP;#NBSP; for good.</p>");
+        System.out.println("TEXT " + t);
+        String html_removed = payloadConverter.convert(t).getText();
+        System.out.println("TEXT, SCRUBBED " + html_removed);
+
+        String ans = "Barb,\n\tMom,\nI'm home #NBSP; for good.";
+        assertEquals(ans, html_removed);
+    }
+
+    @Test
     public void complexEmailTest() throws Exception {
         MessageConverter conv = new MessageConverter();
         ConvertedDocument doc = conv.convert(TEST_FILE);
         System.out.print(doc.getText());
-        // Assert.assertEquals((MESSAGE_BODY + MESSAGE_BOUNDARY).trim(), doc.getText());
+        // assertEquals((MESSAGE_BODY + MESSAGE_BOUNDARY).trim(), doc.getText());
 
         // HTML content is parsed and appended in order to message body.  Oh well.
         //
-        Assert.assertEquals(3, doc.getRawChildren().size());
+        assertEquals(3, doc.getRawChildren().size());
         final HashMap<String, Content> children = new HashMap<String, Content>();
         for (final Content child : doc.getRawChildren()) {
             children.put(child.id, child);
         }
 
         Content text_attach = children.get("xtext-embedded-attached-text.txt");
-        Assert.assertNotNull("text attachment was not found, available attachments are: " + children.keySet(),
+        assertNotNull("text attachment was not found, available attachments are: " + children.keySet(),
                 text_attach);
 
         String orig_text_attach = IOUtils.toString(getClass().getResourceAsStream("/multimedia-tests/xtext-embedded-attached-text.txt"),
@@ -79,44 +95,44 @@ public class MessageConverterTest {
         if (!"\r\n".equals(sep)) {
             orig_text_attach = orig_text_attach.replaceAll(sep, "\r\n");
         }
-        Assert.assertEquals("text/plain", new MimeType(text_attach.mimeType).getBaseType());
-        Assert.assertEquals(orig_text_attach, new String(text_attach.content, text_attach.encoding));
-        Assert.assertTrue(text_attach.meta.getProperty(CONTENT_ID).startsWith("A686FA7D9F4FB64E99601455209639C5"));
-        Assert.assertEquals("attachment", text_attach.meta.getProperty(CONTENT_DISPOSITION));
+        assertEquals("text/plain", new MimeType(text_attach.mimeType).getBaseType());
+        assertEquals(orig_text_attach, new String(text_attach.content, text_attach.encoding));
+        assertTrue(text_attach.meta.getProperty(CONTENT_ID).startsWith("A686FA7D9F4FB64E99601455209639C5"));
+        assertEquals("attachment", text_attach.meta.getProperty(CONTENT_DISPOSITION));
 
         /* HTML attachment retrieval is broken:  TODO:  HTML attachments are converted and embedded as text
           This is confused with inline HTML
         Content html_attach = children.get("word_doc_as_html.htm");
-        Assert.assertNotNull("Embedded HTML was not found.", html_attach);
+        assertNotNull("Embedded HTML was not found.", html_attach);
 
-        Assert.assertEquals("text/html", new MimeType(html_attach.mimeType).getBaseType());
-        Assert.assertTrue(html_attach.meta.getProperty(CONTENT_ID).startsWith("64B706D14F6CAF4598A5A756E2E763A0"));
-        Assert.assertEquals("attachment", html_attach.meta.getProperty(CONTENT_DISPOSITION));
+        assertEquals("text/html", new MimeType(html_attach.mimeType).getBaseType());
+        assertTrue(html_attach.meta.getProperty(CONTENT_ID).startsWith("64B706D14F6CAF4598A5A756E2E763A0"));
+        assertEquals("attachment", html_attach.meta.getProperty(CONTENT_DISPOSITION));
          */
         Content word_attach = children.get("doc_with_embedded_geocoded_image2.docx");
-        Assert.assertNotNull("Doc with geocoded image was not found.", word_attach);
-        Assert.assertEquals("application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        assertNotNull("Doc with geocoded image was not found.", word_attach);
+        assertEquals("application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 new MimeType(word_attach.mimeType).getBaseType());
-        Assert.assertTrue(word_attach.meta.getProperty(CONTENT_ID).startsWith("3ED3B89ABF3D1840B551B527B4DA054D"));
-        Assert.assertEquals("attachment", word_attach.meta.getProperty(CONTENT_DISPOSITION));
+        assertTrue(word_attach.meta.getProperty(CONTENT_ID).startsWith("3ED3B89ABF3D1840B551B527B4DA054D"));
+        assertEquals("attachment", word_attach.meta.getProperty(CONTENT_DISPOSITION));
         Content jpeg_attach = children.get("android_photo_with_gps1.jpeg");
-        Assert.assertNotNull("Photo with attached image was not found.", jpeg_attach);
-        Assert.assertEquals("image/jpeg", new MimeType(jpeg_attach.mimeType).getBaseType());
-        Assert.assertTrue(jpeg_attach.meta.getProperty(CONTENT_ID).startsWith("485710da-7b60-461a-a566-0ad2e0a14b82"));
-        Assert.assertEquals("inline", jpeg_attach.meta.getProperty(CONTENT_DISPOSITION));
+        assertNotNull("Photo with attached image was not found.", jpeg_attach);
+        assertEquals("image/jpeg", new MimeType(jpeg_attach.mimeType).getBaseType());
+        assertTrue(jpeg_attach.meta.getProperty(CONTENT_ID).startsWith("485710da-7b60-461a-a566-0ad2e0a14b82"));
+        assertEquals("inline", jpeg_attach.meta.getProperty(CONTENT_DISPOSITION));
 
         Content htmlbody = null;
         for (final Content child : doc.getRawChildren()) {
             if ("true".equals(child.meta.getProperty(MessageConverter.MAIL_KEY_PREFIX + "html-body"))) {
-                Assert.assertNull("multiple html bodies found", htmlbody);
-                Assert.assertEquals("text/html", new MimeType(child.mimeType).getBaseType());
-                Assert.assertTrue(child.meta.getProperty(CONTENT_ID).startsWith("BEA4D58835C6A342B10D665B40F9D105"));
+                assertNull("multiple html bodies found", htmlbody);
+                assertEquals("text/html", new MimeType(child.mimeType).getBaseType());
+                assertTrue(child.meta.getProperty(CONTENT_ID).startsWith("BEA4D58835C6A342B10D665B40F9D105"));
                 htmlbody = child;
             }
         }
 
         // HTML attachment parsing tests need review
-        // Assert.assertNotNull("html body was not found", htmlbody);
+        // assertNotNull("html body was not found", htmlbody);
     }
 
     private static final String MESSAGE_BODY = "This is a test of a mime message with several different parsing options.\n"

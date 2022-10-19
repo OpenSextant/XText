@@ -80,7 +80,7 @@ public class MessageConverter extends ConverterAdapter {
     private final Session noSession = Session.getDefaultInstance(new Properties());
     private int attachmentNumber = 0;
     private final List<String> textEncodings = new LinkedList<>();
-    private Converter payloadConverter = null;
+    private Converter payloadConverter = new TikaHTMLConverter(false);
 
     /**
      * @param in  stream
@@ -92,9 +92,6 @@ public class MessageConverter extends ConverterAdapter {
             throws IOException {
         attachmentNumber = 0;
         textEncodings.clear();
-        if (payloadConverter == null) {
-            payloadConverter = new TikaHTMLConverter(false);
-        }
         try {
             // Connect to the message file
             //
@@ -377,6 +374,8 @@ public class MessageConverter extends ConverterAdapter {
                         } else {
                             logger.debug("Other encoding is unaccounted: {}", meta.transferEncoding);
                         }
+                    } else if (text.contains("</")) {
+                        text = adhocHTMLUnformatter(text);
                     }
 
                     if (meta.isAttachment()) {
@@ -435,6 +434,43 @@ public class MessageConverter extends ConverterAdapter {
             }
         } catch (MessagingException e2) {
             logger.error("Extraction Failed on Messaging Exception", e2);
+        }
+    }
+
+
+    Pattern P_REGEX = Pattern.compile("<P/?>\r?\n?", Pattern.CASE_INSENSITIVE);
+    Pattern BR_REGEX = Pattern.compile("<BR/?>\r?\n", Pattern.CASE_INSENSITIVE);
+    Pattern SP_REGEX = Pattern.compile("&nbsp;", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * EXPERIMENTAL:  Still exploring how wrong MIME part metadata is in mis-representing content.
+     * This routine is here to aid in converting parts marked as "text/plain" but still have HTML.
+     *
+     * NOT a generalized function:  For MIME snippets of HTML, remove HTML tags that Tika does not
+     * fully replace:
+     *
+     * - P paragraph marker is an opening newline and possible a NEWLINE + TAB indent
+     * - BR + \n is really just a single NEWLINE
+     * - &amp;NBSP; is typically a single space, rather than the full unicode char
+     *
+     * This returns partially stripped HTML
+     * @param t raw input text that is suspected of having HTML tags
+     * @return String hopefully plain/text with minimized special chars
+     */
+    public String adhocHTMLUnformatter(String t) {
+        if (t == null) {
+            return null;
+        }
+        // Convert double line breaks back to \n
+        String output = BR_REGEX.matcher(t).replaceAll("\n");
+        output = P_REGEX.matcher(output).replaceAll("\n\t");
+        output = SP_REGEX.matcher(output).replaceAll(" ");
+
+        try {
+            ConvertedDocument payload = payloadConverter.convert(output);
+            return payload.getText();
+        } catch (IOException err) {
+            return output;
         }
     }
 
