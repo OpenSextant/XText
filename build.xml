@@ -47,6 +47,7 @@
     <copy todir="${xtext.release}/etc/">
       <fileset dir="${xtext.home}/etc">
         <include name="logback.*"/>
+        <include name="logging.*"/>
         <include name="tika*"/>
       </fileset>
     </copy>
