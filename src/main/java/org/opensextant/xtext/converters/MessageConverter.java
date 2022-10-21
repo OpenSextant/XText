@@ -94,7 +94,6 @@ public class MessageConverter extends ConverterAdapter {
         textEncodings.clear();
         try {
             // Connect to the message file
-            //
             MimeMessage msg = new MimeMessage(noSession, in);
             return convertMimeMessage(msg, doc);
         } catch (Exception xerr) {
@@ -116,11 +115,10 @@ public class MessageConverter extends ConverterAdapter {
      * @throws MessagingException on err
      * @throws IOException        on err
      */
-    public ConvertedDocument convertMimeMessage(Message msg, File doc) throws MessagingException,
+    public ConvertedDocument convertMimeMessage(MimeMessage msg, File doc) throws MessagingException,
             IOException {
         ConvertedDocument parentMsgDoc = new ConvertedDocument(doc);
         parentMsgDoc.is_RFC822_attachment = true;
-        // parentMsgDoc.setEncoding(parseCharset(msg.getContentType()));
 
         setMailAttributes(parentMsgDoc, msg);
 
@@ -148,7 +146,7 @@ public class MessageConverter extends ConverterAdapter {
      * @param message original mail message
      * @throws MessagingException on err
      */
-    private void setMailAttributes(ConvertedDocument msgdoc, Message message) throws MessagingException {
+    private void setMailAttributes(ConvertedDocument msgdoc, MimeMessage message) throws MessagingException {
         String msg_id = getMessageID(message);
         if (msg_id == null) {
             return;

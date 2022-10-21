@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.6.0</version>
+  <version>3.6.1-SNAPSHOT</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
@@ -174,7 +174,7 @@
     <dependency>
       <groupId>com.sun.mail</groupId>
       <artifactId>javax.mail</artifactId>
-      <version>1.5.1</version>
+      <version>1.6.2</version>
     </dependency>
     <!-- Logback is nice and simple. -->
     <dependency>
@@ -377,6 +377,7 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+          <encoding>UTF-8</encoding>
           <compilerVersion>1.8</compilerVersion>
           <compilerArgument>-Xlint:all,-path</compilerArgument>
           <showWarnings>true</showWarnings>
