@@ -610,7 +610,7 @@ public class PathManager {
      * @param filepath path to test
      * @return true if file parent is "/xtext/" or "\xtext\, case sensitive is found anywhere in path.
      */
-    public  static final boolean isXTextCache(String filepath) {
+    public  static boolean isXTextCache(String filepath) {
         if (filepath.contains(DEFAULT_EMBED_FOLDER_IN_PATH)) {
             return true;
         }
@@ -627,7 +627,7 @@ public class PathManager {
      * @param obj path to test.
      * @return  true if file parent is "xtext", case sensitive.
      */
-    public  static final boolean isXTextCache(File obj) {
+    public  static boolean isXTextCache(File obj) {
         return DEFAULT_EMBED_FOLDER.equals(obj.getParentFile().getName());
     }
 

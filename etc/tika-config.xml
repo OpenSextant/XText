@@ -12,6 +12,7 @@
     <parser class="org.apache.tika.parser.microsoft.rtf.RTFParser"></parser>
     <parser class="org.apache.tika.parser.odf.OpenDocumentParser"></parser>
     <parser class="org.apache.tika.parser.pdf.PDFParser"></parser>
+    <parser class="org.apache.tika.parser.image.JpegParser"></parser>
 
   </parsers>
 </properties>

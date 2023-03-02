@@ -23,9 +23,7 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -58,12 +56,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private boolean emitMinimalText = true;
 
-    public final static String[] usefulFields = { "geo", "gps", "creation", "date", "model" };
-
-    private final static Set<String> usefulFieldsSet = new HashSet<>();
-    static {
-        usefulFieldsSet.addAll(Arrays.asList(usefulFields));
-    }
+    public final static String[] usefulFields = {"geo", "gps", "creation", "date", "model"};
 
     public ImageMetadataConverter() {
         ctx.set(Parser.class, parser);
@@ -131,6 +124,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
         StringBuilder buf = new StringBuilder();
         BodyContentHandler handler = new BodyContentHandler();
 
+        //
         String type = "Image";
         String objName = null;
         if (doc != null) {
@@ -188,7 +182,7 @@ public class ImageMetadataConverter extends ConverterAdapter {
 
             // Location if available.
             if (lat != null && lon != null) {
-                logger.info("Found a location LAT={} LON={}", lat, lon);
+                logger.debug("Found a location LAT={} LON={}", lat, lon);
                 // imgDoc.addProperty("location", String.format("%2.8f,%3.8f", ));
                 imgDoc.addUserProperty("location", String.format("%s, %s", lat, lon));
                 try {

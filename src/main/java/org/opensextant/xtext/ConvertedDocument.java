@@ -482,9 +482,8 @@ public final class ConvertedDocument extends DocInput {
      * The whole point of this mess:  get the text from the original. It is set here and line endings normalized to unix line endings, \n
      *
      * @param buf textual data for this document object
-     * @throws UnsupportedEncodingException on err
      */
-    public void setText(String buf) throws UnsupportedEncodingException {
+    public void setText(String buf) {
         this.buffer = buf;
 
         if (StringUtils.isBlank(buffer)) {
@@ -503,7 +502,7 @@ public final class ConvertedDocument extends DocInput {
             textpath = this.filepath;
         }
 
-        addNumberProperty("textsize", (long) buffer.length());
+        addNumberProperty("textsize", buffer.length());
     }
 
     /**

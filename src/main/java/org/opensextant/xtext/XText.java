@@ -687,9 +687,8 @@ public final class XText implements ExclusionFilter, Converter {
      * is trapped in loop
      *
      * @param input the input
-     * @throws IOException on err
      */
-    public void convertFolder(File input) throws IOException {
+    public void convertFolder(File input) {
         java.util.Collection<File> files = FileUtils.listFiles(input,
                 new SuffixFileFilter(fileFilters, IOCase.INSENSITIVE), FileFilterUtils.trueFileFilter());
         for (File f : files) {

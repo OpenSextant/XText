@@ -79,7 +79,6 @@ public class MessageConverter extends ConverterAdapter {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     private final Session noSession = Session.getDefaultInstance(new Properties());
     private int attachmentNumber = 0;
-    private final List<String> textEncodings = new LinkedList<>();
     private Converter payloadConverter = new TikaHTMLConverter(false);
 
     /**
@@ -91,7 +90,6 @@ public class MessageConverter extends ConverterAdapter {
     protected ConvertedDocument conversionImplementation(InputStream in, File doc)
             throws IOException {
         attachmentNumber = 0;
-        textEncodings.clear();
         try {
             // Connect to the message file
             MimeMessage msg = new MimeMessage(noSession, in);
@@ -268,8 +266,6 @@ public class MessageConverter extends ConverterAdapter {
         try {
 
             PartMetadata meta = new PartMetadata(bodyPart);
-            // String charset = (meta.charset == null ? "UTF-8" : meta.charset);
-            textEncodings.add(meta.charset);
 
             String filename = bodyPart.getFileName();
             String fileext = meta.getPossibleFileExtension();

@@ -22,6 +22,7 @@ import java.io.InputStream;
 
 import org.apache.tika.detect.DefaultDetector;
 import org.apache.tika.detect.Detector;
+import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.parser.AutoDetectParser;
@@ -31,6 +32,9 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.opensextant.util.FileUtility;
 import org.opensextant.util.TextUtils;
 import org.opensextant.xtext.ConvertedDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 /**
  * Default conversion is almost a pass through from Tika's auto parser and BodyContentHandler.
@@ -40,6 +44,8 @@ import org.opensextant.xtext.ConvertedDocument;
  * @author Marc C. Ubaldino, MITRE, ubaldino at mitre dot org
  */
 public class DefaultConverter extends ConverterAdapter {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     /* 1 MB of text from a given document */
     public final static int MAX_TEXT_SIZE = 0x100000;
@@ -77,8 +83,10 @@ public class DefaultConverter extends ConverterAdapter {
             parser.parse(input, handler, metadata, ctx);
         } catch (NoClassDefFoundError classErr) {
             throw new IOException("Unable to parse content due to Tika misconfiguration", classErr);
-        } catch (Exception xerr) {
-            throw new IOException("Unable to parse content", xerr);
+        } catch (TikaException e1) {
+            throw new IOException("Tika: Unable to parse content", e1);
+        } catch (SAXException e2) {
+            throw new IOException("SAX: Unable to parse content", e2);
         }
         ConvertedDocument textdoc = new ConvertedDocument(doc);
 
