@@ -64,7 +64,7 @@
     <dependency>
       <groupId>org.opensextant</groupId>
       <artifactId>opensextant-xponents-core</artifactId>
-      <version>3.6.0</version>
+      <version>3.6.2</version>
       <exclusions>
         <exclusion>
           <groupId>org.opensextant</groupId>
