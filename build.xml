@@ -6,6 +6,7 @@
   <property name="xtext.version" value="3.6"/>
   <property name="xtext.release" location="${xtext.home}/dist/XText-${xtext.version}"/>
   <target name="build">
+    <delete dir="${basedir}/lib"/>
     <exec executable="mvn" dir="${xtext.home}" failonerror="true">
       <arg value="-DincludeScope=test"/>
       <arg value="-DincludeScope=runtime"/>
