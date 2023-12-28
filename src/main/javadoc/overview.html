@@ -122,82 +122,82 @@ Metadata properties tracked in the metadata header include:<br>
     <caption>Conversion Fields</caption>
     <tbody>
     <tr>
-        <td valign="top"><b>Field</b><b><br>
+        <td style="vertical-align:top"><b>Field</b><b><br>
         </b></td>
-        <td valign="top"><b>Description</b><b><br>
+        <td style="vertical-align:top"><b>Description</b><b><br>
         </b></td>
     </tr>
     <tr>
-        <td valign="top">title<br>
+        <td style="vertical-align:top">title<br>
         </td>
-        <td valign="top">document title, per
+        <td style="vertical-align:top">document title, per
             Tika.&nbsp; If null or untitled we may try to get a
             scrubbed first 100 chars.<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">author<br>
+        <td style="vertical-align:top">author<br>
         </td>
-        <td valign="top">document author<br>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">subject<br>
-        </td>
-        <td valign="top">subject keywords<br>
+        <td style="vertical-align:top">document author<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">filepath<br>
+        <td style="vertical-align:top">subject<br>
         </td>
-        <td valign="top">file path to
+        <td style="vertical-align:top">subject keywords<br>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top">filepath<br>
+        </td>
+        <td style="vertical-align:top">file path to
             original.&nbsp; If unzipped archive this may be irrelevant
             or at least a relative path.&nbsp;&nbsp; TODO: format may
             be: file:///&lt;archive&gt;!&lt;file&gt;<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">encoding<br>
+        <td style="vertical-align:top">encoding<br>
         </td>
-        <td valign="top">native encoding<br>
+        <td style="vertical-align:top">native encoding<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">pub_date<br>
+        <td style="vertical-align:top">pub_date<br>
         </td>
-        <td valign="top">best publication date
+        <td style="vertical-align:top">best publication date
             for the document<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">encrypted<br>
+        <td style="vertical-align:top">encrypted<br>
         </td>
-        <td valign="top">Yes | No<br>
+        <td style="vertical-align:top">Yes | No<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">creator_tool<br>
+        <td style="vertical-align:top">creator_tool<br>
         </td>
-        <td valign="top">authoring tool used to
+        <td style="vertical-align:top">authoring tool used to
             create the document<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">converter<br>
+        <td style="vertical-align:top">converter<br>
         </td>
-        <td valign="top">conversion class<br>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">conversion_date<br>
-        </td>
-        <td valign="top">date of conversion<br>
+        <td style="vertical-align:top">conversion class<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">filtered<br>
+        <td style="vertical-align:top">conversion_date<br>
         </td>
-        <td valign="top">True |
+        <td style="vertical-align:top">date of conversion<br>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top">filtered<br>
+        </td>
+        <td style="vertical-align:top">True |
             False.&nbsp;&nbsp; If the content was scrubbed beyond rote
             file conversion.&nbsp; Web HTML articles are likely the
             only case now.&nbsp; HTML content that is filtered is
@@ -217,21 +217,21 @@ Metadata properties tracked in the metadata header include:<br>
     <caption>Supported Formats</caption>
     <tbody>
     <tr>
-        <td valign="top">File Extension<br>
+        <td style="vertical-align:top">File Extension<br>
         </td>
-        <td valign="top">Converter Class<br>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top">.doc<br>
-        </td>
-        <td valign="top">MSDocConverter<br>
+        <td style="vertical-align:top">Converter Class<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">.html, .htm<br>
+        <td style="vertical-align:top">.doc<br>
         </td>
-        <td valign="top">TikaHTMLConverter<br>
+        <td style="vertical-align:top">MSDocConverter<br>
+        </td>
+    </tr>
+    <tr>
+        <td style="vertical-align:top">.html, .htm<br>
+        </td>
+        <td style="vertical-align:top">TikaHTMLConverter<br>
             XText.scrub_article&nbsp; = true | false to affect HTML
             scrubbing.&nbsp; Scrubbing is good for pure web content,
             but if you have HTML that originated from within your
@@ -239,24 +239,24 @@ Metadata properties tracked in the metadata header include:<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">.pdf<br>
+        <td style="vertical-align:top">.pdf<br>
         </td>
-        <td valign="top">PDFConverter makes use
+        <td style="vertical-align:top">PDFConverter makes use
             of PDFBox. This may be ported to the Tika parser.<br>
             To use <br>
         </td>
     </tr>
     <tr>
-        <td valign="top">MS Office files, RTF<br>
+        <td style="vertical-align:top">MS Office files, RTF<br>
         </td>
-        <td valign="top">DefaultConverter a
+        <td style="vertical-align:top">DefaultConverter a
             wrapper around Tika.<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">*.txt<br>
+        <td style="vertical-align:top">*.txt<br>
         </td>
-        <td valign="top">Plain text files are a
+        <td style="vertical-align:top">Plain text files are a
             bit difficult -- the main issue here is detecting encoding
             properly.&nbsp; XText tries to detect ASCII, UTF-8 or
             other encodings as best as it can.&nbsp; ASCII/UTF-8 files
@@ -273,9 +273,9 @@ Metadata properties tracked in the metadata header include:<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">*.jpg, *.jpeg<br>
+        <td style="vertical-align:top">*.jpg, *.jpeg<br>
         </td>
-        <td valign="top">ImageMetadataConverter
+        <td style="vertical-align:top">ImageMetadataConverter
             saves EXIF header from JPEG format.&nbsp; Special
             attention is paid to pulling out GPS Lat/Lon as a "location"
             field in metadata.<br>
@@ -283,9 +283,9 @@ Metadata properties tracked in the metadata header include:<br>
         </td>
     </tr>
     <tr>
-        <td valign="top">*.eml, *.msg<br>
+        <td style="vertical-align:top">*.eml, *.msg<br>
         </td>
-        <td valign="top">MessageConverter saves
+        <td style="vertical-align:top">MessageConverter saves
             Email message formats (and I/O streams) as RFC822 MIME
             Messages using Java Mail API.&nbsp; Attachments are saved
             off email in XText output folder or embedded;&nbsp; Items
@@ -295,9 +295,9 @@ Metadata properties tracked in the metadata header include:<br>
         </td>
     </tr>
     <tr>
-        <td valign="top"><br>
+        <td style="vertical-align:top"><br>
         </td>
-        <td valign="top"><br>
+        <td style="vertical-align:top"><br>
         </td>
     </tr>
     </tbody>
