@@ -23,6 +23,8 @@ import org.opensextant.ConfigException;
 
 public interface Collector {
 
+    /** default path separator
+     */
     char PATH_SEP = '/';
 
     /**
