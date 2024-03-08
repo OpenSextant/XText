@@ -3,7 +3,7 @@
     Builds a version of Xponents that runs out of the box.
   </description>
   <property name="xtext.home" value="${basedir}"/>
-  <property name="xtext.version" value="3.6"/>
+  <property name="xtext.version" value="3.7"/>
   <property name="xtext.release" location="${xtext.home}/dist/XText-${xtext.version}"/>
   <target name="build">
     <delete dir="${basedir}/lib"/>
