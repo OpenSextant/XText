@@ -57,7 +57,7 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.4.14</version>
+        <version>1.5.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -415,7 +415,7 @@
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
-            <phase></phase> <!-- Only execute from the command line. -->
+            <phase/> <!-- Only execute from the command line. -->
             <configuration>
               <outputDirectory>lib</outputDirectory>
               <includeScope>runtime</includeScope>
