@@ -105,7 +105,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.10.0</version>
+      <version>1.14.0</version>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -126,7 +126,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.26.0</version>
+      <version>1.28.0</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
@@ -415,7 +415,7 @@
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
-            <phase></phase> <!-- Only execute from the command line. -->
+            <phase/> <!-- Only execute from the command line. -->
             <configuration>
               <outputDirectory>lib</outputDirectory>
               <includeScope>runtime</includeScope>
