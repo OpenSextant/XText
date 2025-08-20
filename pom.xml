@@ -35,9 +35,9 @@
   </developers>
   <properties>
     <slf4j.version>2.0.12</slf4j.version>
-    <tika.version>2.9.1</tika.version>
+    <tika.version>2.9.3</tika.version>
     <log4j.version>2.23.0</log4j.version>
-    <xponents.version>3.7.0</xponents.version>
+    <xponents.version>3.7.6</xponents.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -415,7 +415,7 @@
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
-            <phase></phase> <!-- Only execute from the command line. -->
+            <phase/> <!-- Only execute from the command line. -->
             <configuration>
               <outputDirectory>lib</outputDirectory>
               <includeScope>runtime</includeScope>
