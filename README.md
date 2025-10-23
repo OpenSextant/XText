@@ -120,6 +120,11 @@ An example:
 
 # RELEASE NOTES
 
+### 3.8 NOVA
+
+- Tika 3.2 -- did not break much. 
+- Apache Commons libraries and Maven plugins patched; Some security issues noted -- mainly cited by Tika releases
+
 ### v3.7 STEADY
 
 - Tika 2.9.x
