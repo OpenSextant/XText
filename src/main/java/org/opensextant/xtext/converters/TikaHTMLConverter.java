@@ -28,7 +28,7 @@ import net.htmlparser.jericho.StartTag;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.html.HtmlParser;
+import org.apache.tika.parser.html.JSoupParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.boilerpipe.BoilerpipeContentHandler;
 import org.opensextant.util.TextUtils;
@@ -46,7 +46,7 @@ import org.xml.sax.ContentHandler;
 public class TikaHTMLConverter extends ConverterAdapter {
 
     public static final int MAX_HTML_FILE_SIZE = 0x80000; // 0.5 MB
-    HtmlParser parser = new HtmlParser();
+    JSoupParser parser = new JSoupParser();
     private boolean scrubHTMLArticle = false;
     private int maxHTMLDocumentSize = MAX_HTML_FILE_SIZE;
     private static Logger log = LoggerFactory.getLogger(TikaHTMLConverter.class);

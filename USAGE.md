@@ -103,7 +103,7 @@ To enable caching,
 
     XText..getPathManager().enableSaving(true);
 
-The cache could be saved along side the originals, in the very same input folder structure that is found.
+The cache could be saved alongside the originals, in the very same input folder structure that is found.
 OR the cache could be saved in a separate, parallel folder structure.
 
     input:   /path/to/a/file.doc

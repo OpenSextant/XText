@@ -91,7 +91,7 @@ Running it, from a release try the example below.
 An example:
     mkdir /tmp/conversions/
 
-   cd ./XText-3.5/
+   cd ./XText-3.8/
    ./script/convert.sh --input ./test --output /tmp/conversions
 
 ```
@@ -119,6 +119,11 @@ An example:
 
 
 # RELEASE NOTES
+
+### v3.7 STEADY
+
+- Tika 2.9.x
+- Security patches
 
 ### v3.6 TIKA MASALA
 

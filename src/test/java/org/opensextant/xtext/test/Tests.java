@@ -196,6 +196,11 @@ public class Tests {
         log.info("HTML: tile= " + saveHTMLdoc.getProperty("title"));
         log.info("HTML: body= " + saveHTMLdoc.getText());
 
+        File f2 = new File(Tests.class.getResource("/multimedia-tests/word_doc_as_html.htm").toURI());
+        saveHTMLdoc = new TikaHTMLConverter(true).convert(f2);
+        log.info("HTML: tile= " + saveHTMLdoc.getProperty("title"));
+        log.info("HTML: body= " + saveHTMLdoc.getText());
+
         ConvertedDocument doc3 = new TikaHTMLConverter(false).convert(f);
         log.info("HTML: tile= " + doc3.getProperty("title"));
         log.info("HTML: body= " + doc3.getText());
