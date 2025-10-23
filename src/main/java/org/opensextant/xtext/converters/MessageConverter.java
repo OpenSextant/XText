@@ -25,8 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -758,7 +756,7 @@ public class MessageConverter extends ConverterAdapter {
     private final static Pattern ANGLE_EXTRACTOR = Pattern.compile("<(.+)>");
 
     /**
-     * Parse 'value' from '<value>' Used for pulling emailaddress or msgId value
+     * Parse 'value' from angle brackets Used for pulling emailaddress or msgId value
      * from headers.
      *
      * @param value any text

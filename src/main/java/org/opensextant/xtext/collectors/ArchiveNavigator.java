@@ -17,6 +17,9 @@
  */
 package org.opensextant.xtext.collectors;
 
+import java.io.*;
+import java.util.zip.GZIPInputStream;
+
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -24,16 +27,13 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.opensextant.ConfigException;
 import org.opensextant.xtext.Converter;
 import org.opensextant.xtext.ExclusionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Archive is traversed, but no data is written to disk unless XText is in save
@@ -120,11 +120,11 @@ public class ArchiveNavigator implements Collector {
     public File unzip(File zipFile) throws IOException {
 
         try (InputStream input = new BufferedInputStream(new FileInputStream(zipFile));
-             ZipArchiveInputStream in = (ZipArchiveInputStream) (new ArchiveStreamFactory().createArchiveInputStream(
-                     "zip", input))) {
+             ZipArchiveInputStream in = new ArchiveStreamFactory().createArchiveInputStream(
+                     "zip", input)) {
             File workingDir = saveDir;
             ZipArchiveEntry zipEntry;
-            while ((zipEntry = (ZipArchiveEntry) in.getNextEntry()) != null) {
+            while ((zipEntry = in.getNextEntry()) != null) {
                 if (filterEntry(zipEntry)) {
                     continue;
                 }
@@ -186,11 +186,11 @@ public class ArchiveNavigator implements Collector {
         workingDir.mkdir();
 
         try (InputStream input = new BufferedInputStream(new FileInputStream(tarFile));
-             TarArchiveInputStream in = (TarArchiveInputStream) (new ArchiveStreamFactory().createArchiveInputStream(
-                     "tar", input))
+             TarArchiveInputStream in = new ArchiveStreamFactory().createArchiveInputStream(
+                     "tar", input)
         ) {
             TarArchiveEntry tarEntry;
-            while ((tarEntry = (TarArchiveEntry) in.getNextEntry()) != null) {
+            while ((tarEntry = in.getNextEntry()) != null) {
                 if (filterEntry(tarEntry)) {
                     continue;
                 }

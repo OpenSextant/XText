@@ -52,7 +52,7 @@ public class SPLink extends HyperLink {
         super(link, base, base);
 
         if (isSharepointFolder()) {
-            urlValue = unescapeHtml4(URLDecoder.decode(urlValue, "UTF-8"));
+            urlValue = unescapeHtml4(URLDecoder.decode(urlValue, StandardCharsets.UTF_8));
         }
 
         if (isAbsolute()) {
