@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opensextant</groupId>
-  <version>3.8.0</version>
+  <version>3.8.1</version>
   <name>XText</name>
   <artifactId>opensextant-xponents-xtext</artifactId>
   <description>Content extraction simplified! Retrieve text, data and metadata from binary documents using Tika and
@@ -90,13 +90,14 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.18.0</version>
     </dependency>
-    <!-- Override JSON-lib use of old commons-lang 2.5 -->
+    <!-- Override JSON-lib use of old commons-lang 2.5
     <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
       <scope>runtime</scope>
     </dependency>
+    -->
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
@@ -415,7 +416,8 @@
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
-            <phase/> <!-- Only execute from the command line. -->
+            <phase/>
+            <!-- Only execute from the command line. -->
             <configuration>
               <outputDirectory>lib</outputDirectory>
               <includeScope>runtime</includeScope>

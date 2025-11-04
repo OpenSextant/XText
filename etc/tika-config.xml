@@ -4,7 +4,7 @@
 
   <parsers>
 
-    <parser class="org.apache.tika.parser.html.HtmlParser"></parser>
+    <parser class="org.apache.tika.parser.html.JSoupParser"></parser>
     <parser class="org.apache.tika.parser.mbox.MboxParser"></parser>
     <parser class="org.apache.tika.parser.microsoft.OfficeParser"></parser>
     <parser class="org.apache.tika.parser.microsoft.ooxml.OOXMLParser"></parser>
