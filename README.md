@@ -1,19 +1,26 @@
-XText
+# XText
+
+|                                                                                                                                            |
+|--------------------------------------------------------------------------------------------------------------------------------------------|
+| **About**<br/>The OpenSextant "Xponents" Project group is covered Public Release# 26-0723, <br/>(c) Copyright 2013-2026 MITRE Corporation, |
+| See parent project https://opensextant.github.io/Xponents/                                                                                 |
+
 =================
 ```
     Author: Marc. C. Ubaldino, MITRE Corporation
     Date: 2013-March
     Updated: 2021-April, 2022-Oct
-    Copyright MITRE Corporation, 2012-2021
+    Copyright MITRE Corporation, 2013-2021
 ```
 
 Apache Tika is awesome, but...
 ----------------------
 Tika provides all sorts of solid content conversion and parsing capabilities.  But it is a 
-developer's tool -- for those who want to get close to all the gory details.  There is some 
-amount of simplification and readiness for operationalizing things like Tika for more direct use in pipelines.
+developer's tool -- for those who want to get close to all the gory details.  XText leverages Tika and other 
+techniques to greatly simplify content and metadata extraction from common document formats ~ web content, email, 
+office desktop documents and more. 
 
-XText wraps around Tika APIs and other parser APIs with the objective of providing a uniform 
+XText wraps around Tika v3.x APIs and other parser APIs with the objective of providing a uniform 
 `ConvertedDocument` API class that provides the following benefits:
 
 - streamlined meta-data model, using a simple `Properties` map and fewer fields, e.g., `getProperty("title")`. 
